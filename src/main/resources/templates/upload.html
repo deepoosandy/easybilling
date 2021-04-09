@@ -79,28 +79,28 @@ padding: 20px;
           <div class="form-group row">
               <label for="itemNameMnualId" class="control-label col-sm-2">Item Name:</label>
               <div class="col-sm-10">
-                  <input type="text" class="form-control" th:field="*{itemName}" id="itemNameMnualId" placeholder="Item name..">
+                  <input type="text" class="form-control" th:field="*{itemName}" id="itemNameMnualId" placeholder="Item name.." required>
               </div>
           </div>
 
           <div class="form-group row">
               <label for="itemUnitPriceId" class="control-label col-sm-2">Item Unit Price:</label>
               <div class="col-sm-10">
-                  <input type="text" class="form-control" th:field="*{itemUnitPrice}" id="itemUnitPriceId" placeholder="Item unit price..">
+                  <input type="text" class="form-control" th:field="*{itemUnitPrice}" id="itemUnitPriceId" placeholder="Item unit price.." required>
               </div>
           </div>
 
           <div class="form-group row">
               <label for="itemDescriptionId" class="control-label col-sm-2">Item Description:</label>
               <div class="col-sm-10">
-                  <input type="email" class="form-control" th:field="*{itemDescription}" id="itemDescriptionId" placeholder="Item description..">
+                  <input type="text" class="form-control" th:field="*{itemDescription}" id="itemDescriptionId" placeholder="Item description.." required>
               </div>
           </div>
 
           <div class="form-group row">
               <label for="measurementUnitId" class="control-label col-sm-2">Item Measurements:</label>
                   <div class="col-sm-10">
-                      <select class="form-control" id="measurementUnitId" th:field="*{measurementUnit}">
+                      <select class="form-control" id="measurementUnitId" th:field="*{measurementUnit}" required>
                           <option value="">--select Measurement--</option>
                           <option th:each="measurement : ${allMeasurements}" th:value="${measurement.code}" th:text="${measurement.name}"></option>
                       </select>
