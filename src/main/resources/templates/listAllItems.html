@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+
+</style>
+
+
+<head>
+    <title>List All Items</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
+
+    <script src="/js/jqueryScript.js"></script>
+
+</head>
+<body>
+<div th:replace="fragments/other-header :: other-header"/>
+<div class="container">
+<h2>Item Table</h2>
+<!--<div class="row col-md-7 ">-->
+    <div style="margin-bottom:20px; padding:10px; background-color:#5cb85c; color:white;">
+        <p>Type some text to search the table for <strong>Item Code</strong>, <strong>Item Name</strong>, <strong>Item Description</strong>,
+            <strong>Item Uploaded Date</strong>,<Strong>Item Unit Price</Strong>, <strong>Item eff. Date</strong>, <strong>Item thru. Date</strong>:</p>
+        <input class="form-control" id="inputFilter" type="text"
+               placeholder="Search.." />
+    </div>
+    <table id="customerTable" class="table table-bordered table-hover table-responsive">
+        <thead>
+        <tr>
+            <th>Item Code</th>
+            <th>Item Name</th>
+            <th>Item Description</th>
+            <th>Item Unit Price</th>
+            <th>Item Uploaded Date</th>
+            <th>Item eff. Date</th>
+            <th>Item thru. Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+<!--</div>-->
+
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+<script>
+$(document).ready(function() {
+
+	// DO GET
+	$.ajax({
+		type : "GET",
+		url : "list/listallitesm",
+		success: function(result){
+			$.each(result, function(i, listItemDetails){
+				var customerRow = '<tr>' +
+									'<td>' + listItemDetails.itemCode + '</td>' +
+									'<td>' + listItemDetails.itemName.toUpperCase() + '</td>' +
+									'<td>' + listItemDetails.itemDescription + '</td>' +
+									'<td>' + listItemDetails.itemUnitPrice.itemUnitPrice + '</td>' +
+									'<td>' + listItemDetails.uploadedDate + '</td>' +
+									'<td>' + listItemDetails.itemUnitPrice.effDate + '</td>' +
+									'<td>' + listItemDetails.itemUnitPrice.thruDate + '</td>' +
+								  '</tr>';
+
+				$('#customerTable tbody').append(customerRow);
+
+	        });
+
+			$( "#customerTable tbody tr:odd" ).addClass("info");
+			$( "#customerTable tbody tr:even" ).addClass("success");
+		},
+		error : function(e) {
+			alert("ERROR: ", e);
+			console.log("ERROR: ", e);
+		}
+	});
+
+	// do Filter on View
+	$("#inputFilter").on("keyup", function() {
+	    var inputValue = $(this).val().toLowerCase();
+	    $("#customerTable tr").filter(function() {
+	    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+	    });
+	});
+})
+</script>
+</div>
+<footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

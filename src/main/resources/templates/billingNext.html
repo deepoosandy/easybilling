@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+
+
+input[type=text], select, textarea {
+  width: 70%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+label {
+  padding: 5px 5px 5px 0;
+  display: inline-block;
+
+}
+
+input[type=submit] {
+ width: 100%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+ // margin: 8px 0;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+.col-25{
+ width: 25%;
+
+}
+
+.col-75{
+ width: 75%;
+
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 500px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+
+
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+
+</style>
+
+
+<head>
+    <title>Billing Address</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+    <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
+    <link th:href="@{/main.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<div th:replace="fragments/other-header :: other-header"/>
+<div class="container">
+
+    <div class="row" style="margin-left:120px; margin-right:0px; width: 900px">
+        <form  th:action="@{/printbill}"  method="post" th:object="${nextDetailsOfBill}">
+        <div class="column" style="background-color:#aaa;">
+            <div class="row" style="margin-left: 4px;">
+                <div class="col-25;">
+                <label for="billTo" >Bill To:</label>
+                </div>
+                <div class="col-75;">
+                <input type="text" id="billTo" name="billingName" placeholder="Your name.." oninput="displayValueToSpan('billingCol2',this)">
+                </div>
+
+            </div>
+            <div class="row" style="margin-left: 4px;">
+                <div class="col-25;">
+                <label for="phoneNumber" class="col-25;" >Phone Number:</label>
+                </div>
+                <div class="col-75;">
+                <input type="text" id="phoneNumber" name="billerPhoneNumber" placeholder="Phone number.." oninput="displayValueToSpan('phoneNumberCol2',this)">
+                </div>
+            </div>
+
+            <div class="row" style="margin-left: 4px;">
+                <div class="col-25;">
+                <label for="billerAddress" class="col-25;">Address:</label>
+                </div>
+                <div class="col-75;">
+                <textarea id="billerAddress" name="billerAddressName" placeholder="Address.."
+                          style="height:200px" oninput="displayValueToSpan('billingAddressCol2',this)"></textarea>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="column" style="background-color:#bbb;">
+            <div class="row" style="margin-left: 4px; ">
+                <label for="invoice">Invoice #:</label>
+                <span id="invoice" class="text-green-600" th:text="${nextDetailsOfBill.invoiceNumber}"></span>
+                <input type="hidden"  id="invoiceHidden" th:field="*{invoiceNumber}"/>
+            </div>
+            <div class="row" style="margin-left: 4px">
+                <label for="billingCol2">Bill To :</label>
+                <span id="billingCol2" class="text-green-600" ></span>
+                <input type="hidden"  id="billingCol2Hidden" th:field="*{billTo}"/>
+            </div>
+
+            <div class="row" style="margin-left: 4px">
+                <label for="phoneNumberCol2">Phone Number :</label>
+                <span id="phoneNumberCol2"  class="text-green-600" ></span>
+                <input type="hidden"  id="phoneNumberCol2Hidden" th:field="*{phoneNumber}"/>
+            </div>
+
+            <div class="row" style="margin-left: 4px">
+                <label for="billingAddressCol2">Billing Address :</label>
+                <span id="billingAddressCol2" class="text-green-600" ></span>
+                <input type="hidden"  id="billingAddressCol2Hidden" th:field="*{billingAddress}"/>
+            </div>
+
+            <div class="row" style="margin-left: 4px">
+                <label for="totalAmount">Total :</label>
+                <Span id="totalAmount" class="text-green-600" th:text="${nextDetailsOfBill.billingTotalAmount}"></Span>
+                <input type="hidden"  id="totalAmountHidden" th:field="*{billingTotalAmount}"/>
+            </div>
+
+            <div class="row" style="margin-left: 4px">
+                <label for="totalItems">Total items :</label>
+                <span id="totalItems" class="text-green-600" th:text="${nextDetailsOfBill.totalItemsInbill}"></span>
+                <input type="hidden"  id="totalItemsHidden" th:field="*{totalItemsInbill}"/>
+            </div>
+
+            <div class="row" style="margin-left: 4px">
+                <label for="invoiceDate">Invoice Date :</label>
+                <span id="invoiceDate" class="text-green-600" th:text="${nextDetailsOfBill.billingDate}"></span>
+                <input type="hidden"  id="invoiceDateHidden" th:field="*{billingDate}"/>
+            </div>
+        </div>
+
+<!--            <div class="row" style="margin-right: 250px;">-->
+                <input type="submit" value="Print">
+<!--            </div>-->
+        </form>
+    </div>
+
+
+
+
+</div>
+</div>
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+<script>
+    function displayValueToSpan( targetSpanId, inputValue){
+     document.getElementById(targetSpanId).innerHTML=inputValue.value;
+     document.getElementById(targetSpanId+'Hidden').value=inputValue.value;
+    }
+
+</script>
+</body>
+</html>

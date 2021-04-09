@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Spring Boot - Thymeleaf</title>
+    <link th:href="@{/main.css}" rel="stylesheet"/>
+</head>
+<body class="flex items-center justify-center h-screen">
+<div id="print-content">
+    <form>
+
+        <input type="button" onclick="printDiv();" value="print a div!"/>
+    </form>
+</div>
+
+
+<div class="rounded-lg border shadow-lg p-10 w-3/5" id="printIt">
+    <div class="flex flex-row justify-between pb-4">
+        <div>
+            <label for="gstId" style="font-size:10px;">GSTIN:</label>
+            <span id="gstId"  style="font-size:10px;color:#424ef5" th:text="${shopDetails.gstIN}"></span>
+
+        </div>
+        <div>
+            <label for="cellId" style="font-size:10px;">Cell:</label>
+            <span id="cellId" class="text-xl font-bold " style="font-size:10px;color:#424ef5"
+                  th:text="${shopDetails.phoneNumber1}"></span>,
+            <span id="cellId2" class="text-xl font-bold " style="font-size:10px; color:#424ef5"
+                  th:text="${shopDetails.phoneNumber2}"></span>
+
+        </div>
+    </div>
+    <div style=" text-align: center;"><h2 class="text-xl font-bold" style="font-style: italic; font-size:30px; ">
+        <span  style="color:#424ef5" th:text="${shopDetails.shopName}"></span></h2>
+        <span  style="color:#424ef5" th:text="${shopDetails.shopAddress}"></span>
+        <span  style="color:#424ef5" th:text="${shopDetails.district}"></span>
+        <span  style="color:#424ef5" th:text="${shopDetails.state}"></span> -
+        <span style="color:#424ef5"  th:text="${shopDetails.pinCode}"></span>
+    </div>
+    <div class="flex flex-col pb-8" id="print-billId">
+        <div class="pb-2">
+            <hr>
+            <p><span style="font-size:10px;">Distributor:</span>
+                <span  style="font-size:10px; color:#424ef5" th:text="${shopDetails.shopDescription}"></span>
+            </p>
+            <hr>
+        </div>
+        <br>
+
+        <div class="flex flex-col pb-8">
+            <table>
+                <tr>
+                    <td style="width:75%"><label for="billToId" class="font-bold" style="font-size:11px;">Bill To:</label>
+                    <span id="billToId"  style="font-size:11px; color:#424ef5" th:text="${nextDetailsOfBill.billTo}"></span></td>
+                    <td ><label for="invoiceId" class="font-bold" style="font-size:11px;">Invoice #:</label>
+                    <span id="invoiceId"  style="font-size:11px; color:#424ef5" th:text="${nextDetailsOfBill.invoiceNumber}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:75%">
+                        <label for="billToAddressId" class="font-bold" style="font-size:11px;">Address:</label>
+                    <span id="billToAddressId"  style="font-size:11px; color:#424ef5" th:text="${nextDetailsOfBill.billingAddress}"></span>
+                    </td>
+
+                    <td >
+                        <label for="grandTotalId" class="font-bold" style="font-size:11px;">Grand Total :</label>
+                    <span id="grandTotalId"   style="font-size:11px; color:#424ef5" th:text="${nextDetailsOfBill.billingTotalAmount}"></span>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td style="width:75%">
+                        <label for="billToPhoneId" class="font-bold" style="font-size:11px;">Phone:</label>
+                        <span id="billToPhoneId"  style="font-size:11px; color:#424ef5" th:text="${nextDetailsOfBill.phoneNumber}"></span>
+                    </td>
+
+                    <td >
+                        <label for="totalBilledItemId" class="font-bold" style="font-size:11px;">Total Billed Item :</label>
+                        <span id="totalBilledItemId"  style="font-size:11px; color:#424ef5" th:text="${nextDetailsOfBill.totalItemsInbill}"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:75%">
+                        <label for="billingDateId" class="font-bold" style="font-size:11px;">Billing Date:</label>
+                        <span id="billingDateId"  style="font-size:11px; color:#424ef5" th:text="${nextDetailsOfBill.billingDate}"></span>
+                    </td>
+
+                </tr>
+            </table>
+
+        </div>
+        <table class="table-fixed w-full text-right border rounded">
+            <thead class="bg-gray-100" style="font-size:11px;">
+            <tr>
+                <th class="text-left pl-4">Item Name</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th class="pr-4">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="items : ${nextDetailsOfBill.itemsForbill}">
+                <td class="pl-4 text-left"  style="font-size:11px; color:#424ef5" th:text="${items.itemName}"></td>
+                <td style="font-size:11px; color:#424ef5" th:text="${items.itemQuantity}"></td>
+                <td  style="font-size:11px; color:#424ef5" th:text="${items.itemUnitPrice}"></td>
+                <td style="font-size:11px; color:#424ef5" class="pr-4" th:text="${items.itemSum}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="flex flex-row-reverse p-6">
+            <h2 class="font-medium  bg-gray-200 p-2 rounded">
+                Grand Total: <span style="color:#424ef5" th:text="${nextDetailsOfBill.billingTotalAmount}"></span>
+            </h2>
+        </div>
+        <br>
+        <br>
+        <h2 class="text-xl font-bold" style="font-size:11px;">Bank Details</h2>
+        <table class="table-fixed text-left w-2/6">
+            <tr>
+                <th style="font-size:11px; width:125px  ">Bank Name:</th>
+                <td style="font-size:11px; color:#424ef5" th:text="${shopDetails.bankName}"></td>
+            </tr>
+            <tr>
+                <th style="font-size:11px;  ">Bank Account Number:</th>
+                <td style="font-size:11px; color:#424ef5" th:text="${shopDetails.bankAccountNumber}"></td>
+            </tr>
+            <tr>
+                <th style="font-size:11px;">IFSCode:</th>
+                <td style="font-size:11px; color:#424ef5" th:text="${shopDetails.bankIfscCode}"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+    <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+    <script th:src="@{webjars/jspdf/1.4.1/dist/jspdf.min.js}"></script>
+    <script>
+  function printDiv() {
+            var divContents = document.getElementById("printIt").innerHTML;
+            var a = window.open('', '', '');
+            a.document.write('<html>');
+            a.document.write('<head>');
+            a.document.write(' <link href="/main.css" rel="stylesheet"/>');
+            a.document.write('</head>');
+            a.document.write('<body >');
+            a.document.write(divContents);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
+        }
+
+
+    </script>
+</body>
+</html>

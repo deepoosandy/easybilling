@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+</head>
+<body>
+<div th:fragment="footer">
+
+<!--    <div class="container">-->
+
+        <footer>
+        <!-- this is footer -->
+          <span style="text-algin: center;"> &copy; 2021 EasyBilling</span>
+            <span sec:authorize="isAuthenticated()">
+                | Logged user: <span sec:authentication="name"></span> |
+                Roles: <span sec:authentication="principal.authorities"></span> |
+                <a th:href="@{/logout}">Sign Out</a>
+            </span>
+
+        <script type="text/javascript" src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        </footer>
+<!--    </div>-->
+    <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+    <script th:src="@{webjars/jspdf/1.4.1/dist/jspdf.min.js}"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Item Upload</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+</head>
+<body>
+<div th:replace="fragments/other-header :: other-header"/>
+
+
+<div class="container" >
+<h2>Edit Details</h2>
+<div class="table-responsive">
+
+
+    <table class="table table-striped table-primary">
+        <thead class="ttop">
+        <tr class="table-info">
+            <th>#</th>
+            <th>Item Name</th>
+            <th>Item Description</th>
+            <th>Item Price</th>
+            <th>Item Code</th>
+            <th>Uploaded Date</th>
+            <th>Uploaded Item</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="editItem : ${editedItemDetails}" >
+          <!--  <form
+                  th:action="@{/update}"
+                  th:object="${editItem}"
+                  method="post">-->
+            <td><span th:text="${editItem.rowNumber}"/> </td>
+            <td><input th:value="${editItem.itemName}" required/></td>
+            <td><input th:value="${editItem.itemDescription}" required/></td>
+            <td><input th:value="${editItem.itemUnitPrice}" required/></td>
+            <td><input th:value="${editItem.itemCode}" required/></td>
+            <td><span th:text="${editItem.date}"/> </td>
+                <td><button class="btn btn-success" type="submit">Update Item</button></td>
+            <!--</form>-->
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+</body>
+</html>

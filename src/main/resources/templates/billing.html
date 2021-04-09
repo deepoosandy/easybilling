@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+
+.next {
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  float: right;
+  margin: 50px;
+}
+
+a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+}
+
+a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+td {
+    vertical-align: bottom;
+}
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+input[type=text], select {
+
+  padding: 12px 20px;
+  margin: 8px 0;
+
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+</style>
+
+
+<head>
+    <title>List All Items</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
+    <link th:href="@{/main.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<div th:replace="fragments/other-header :: other-header"/>
+
+<div class="container">
+    <div class="row">
+        <a href="#" th:href="@{/next}"    class="next">Next &raquo;</a>
+        <div class="col-md-4 mt-5">
+                <div class="form-group" >
+                    <label for="itemlist1">Select Item</label>
+                    <select id="itemlist1" class="form-control select2-single"  onchange="unitPrice(this)"  >
+                        <option value="">Search item</option>
+                    </select>
+                </div>
+                <br/>
+        </div>
+    </div>
+    <div>
+        <form class="form-inline"  th:action="@{/addtobill}" id="billingForm" th:object="${addToBill}" method="POST">
+            <div class="form-group">
+                <label for="itemPrice" style="margin-right:5px">Item Price (Rs):</label>
+
+                <input type="text" class="form-control text-green-600" id="itemPrice" th:field="*{itemName}" style="font-size:15px; " disabled />
+                <input type="hidden"  id="itemPriceHidden" th:field="*{itemCode}"/>
+            </div>
+            <div class="form-group">
+                <label for="quantity" style="margin-left:20px; margin-right:5px">Quantity:</label>
+                <input type="text" class="form-control " id="quantity" th:field="*{itemQuantity}" placeholder="Enter Quantity" onchange="addItemPrice(this)" />
+            </div>
+
+
+            <div class="form-group">
+                <label for="itemSum" style="margin-left:20px; margin-right:5px">Item Sum (Rs):</label>
+                <input type="text" class="form-control text-green-600" id="itemSum" th:field="*{itemSum}" style="font-size:15px; " disabled/>
+            </div>
+
+            <button class="btn btn-default btn-sm"   style="outline: none; box-shadow: none; color:#5cb85c;"  id="addToBill"  type="submit"
+                    onclick="return validateForItemPrice();">
+                <span class="glyphicon glyphicon-plus"></span> Add To Bill
+            </button>
+
+        </form>
+    </div>
+<br>
+    <br>
+    <br>
+    <div th:unless="${#lists.isEmpty(addedInBill)}">
+        <h2>Billing Items</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Item Name</th>
+            <th>Item Unit Price</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Delete From Bill</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="billedItem : ${addedInBill}">
+            <td ><span th:text="${billedItem.rowNumber}" > Title </span></td>
+            <td ><span th:text="${billedItem.itemName}" > Author </span></td>
+            <td ><span th:text="${billedItem.itemUnitPrice}"> Title </span></td>
+            <td ><span th:text="${billedItem.itemQuantity}" > Author </span></td>
+            <td ><span th:text="${billedItem.itemSum}" > Title </span></td>
+            <td><a  href="#" th:href="@{/delete(rowId=${billedItem.rowNumber})}">
+                <span class="glyphicon glyphicon-trash" style="text-align:center; font-size:20px;color:red;"></span>
+            </a></td>
+        </tr>
+
+
+        </tbody>
+    </table>
+    </div>
+
+</div>
+
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+
+
+
+
+<script>
+
+function validateForItemPrice(){
+
+var inputPrice=  document.getElementById('itemPrice').value
+
+if(inputPrice===''){
+alert("Please select item!");
+return false;
+
+}
+ return true;
+}
+
+function addItemPrice(inputValue){
+var itemUnitPrice= document.getElementById('itemPrice').value;
+var output =itemUnitPrice.split("/");
+
+var total= inputValue.value * (output[0]).trim();
+document.getElementById('itemSum').value=total;
+//billingId
+
+}
+
+
+function unitPrice(inputValue){
+
+ $.ajax({
+        type : "GET",
+        url: "/billing/item/?itemCode="+inputValue.value,
+        success: function(result){
+                       var code=result.itemUnitPrice.measurementUnit;
+                       var itemCode=result.itemCode;
+                       var unitPrice= result.itemUnitPrice.itemUnitPrice;
+                       $.ajax({
+                        type : "GET",
+                        url: "/measurement/id/?code="+code,
+                        success: function(result1 ){
+                         $('#itemPrice').val( unitPrice+ ' / ' +result1);
+                         $('#itemPriceHidden').val(itemCode);
+
+                         }
+
+                                });
+
+        }
+
+   });
+
+}
+
+    $("#itemlist1").select2({
+        theme: "bootstrap4",
+        ajax: {
+            url: '/listitems',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (response) {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    });
+
+
+
+</script>
+
+</body>
+</html>
