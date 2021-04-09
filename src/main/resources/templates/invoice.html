@@ -5,14 +5,19 @@
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <title>Spring Boot - Thymeleaf</title>
+    <title>Invoice</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
     <link th:href="@{/main.css}" rel="stylesheet"/>
 </head>
 <body class="flex items-center justify-center h-screen">
-<div id="print-content">
+<div id="print-content" >
     <form>
-
-        <input type="button" onclick="printDiv();" value="print a div!"/>
+        <a href="#"  class="btn btn-primary" th:href="@{/backtobilling}"  style="position: absolute;left: 79%;top:3%">&laquo; Back</a>
+        <input type="button" class="btn btn-primary" onclick="printDiv();" value="Print Invoice" style="position: absolute;left: 85%;top:3%"/>
     </form>
 </div>
 
@@ -142,7 +147,7 @@
     <script>
   function printDiv() {
             var divContents = document.getElementById("printIt").innerHTML;
-            var a = window.open('', '', '');
+            var a = window.open("", "", "width=500,height=400");
             a.document.write('<html>');
             a.document.write('<head>');
             a.document.write(' <link href="/main.css" rel="stylesheet"/>');
@@ -152,6 +157,10 @@
             a.document.write('</body></html>');
             a.document.close();
             a.print();
+         setTimeout(function() {
+				//$('#alert_placeholder').fadeOut('fast');
+				a.close();
+			}, 50000);
         }
 
 

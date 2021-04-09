@@ -94,7 +94,7 @@ public class BillingController {
         return "billing";
     }
 
-    @GetMapping(value={"/next","/printbill"})
+    @GetMapping(value={"/next","/printbill","/backtobilling"})
     public String billingNextPage(Model model) {
         int lastInvoiceCount = invoiceRepository.lastBilledInvoice();
         ShopDetailsMaster shopetailsMaster = shopDetailsRepository.findById(Long.valueOf(1)).get();
@@ -105,6 +105,14 @@ public class BillingController {
         ItemDetailsMapper.populateInvoiceDto(addToBillList,invoiceDto);
         model.addAttribute("nextDetailsOfBill", invoiceDto);
         return "billingNext";
+    }
+
+    @GetMapping("/backtoprevious")
+    private String backToPrevious(Model model){
+
+        model.addAttribute(SMSConstants.ADD_TO_BILL, new AddToBill());
+        model.addAttribute("addedInBill", addToBillList);
+        return "billing";
     }
 
    /* private void populateFromUI(InvoiceDto invoiceDto, InvoiceDto invoiceDtoFromUI){
