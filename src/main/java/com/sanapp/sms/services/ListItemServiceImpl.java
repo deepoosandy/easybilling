@@ -18,7 +18,7 @@ public class ListItemServiceImpl implements IListItemService {
 
     @Override
     public List<ListItemDetails> listAllItems() {
-        List<ItemDetailsMaster> allItems = itemRepository.listAllItems();
+        List<ItemDetailsMaster> allItems = itemRepository.findAll();
 
         return allItems.stream().map(ItemDetailsMapper::mapperListItemDetails)
                 .collect(Collectors.toList());

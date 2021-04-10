@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ItemDetailsMapper {
 
@@ -31,13 +32,19 @@ public class ItemDetailsMapper {
         return itemDetail;
     }
 
+
     public static Item itemDetailsToItemDto(ItemDetailsMaster domainObj) {
         Item item = new Item();
         item.setItemCode(domainObj.getItemCode());
         item.setItemName(domainObj.getItemName());
         item.setItemDescription(domainObj.getItemDescription());
+        Predicate<UnitPriceT> filter = unitItem -> (unitItem.getEffDt().isBefore(DateUtility.todaysDate()) ||
+                unitItem.getEffDt().isEqual(DateUtility.todaysDate()))
+                && (unitItem.getThruDt().isAfter(DateUtility.todaysDate()) || unitItem.getThruDt().isEqual(DateUtility.todaysDate()));
+        domainObj.setUnitPriceTs(domainObj.getUnitPriceTs().stream().filter(filter).collect(Collectors.toList()));
         item.setItemUnitPrice(domainObj.getUnitPriceTs().get(0).getUnitPrice());
         item.setMeasurementUnit(domainObj.getUnitPriceTs().get(0).getMeasurementUnit());
+        item.setItemId(domainObj.getId());
         return item;
     }
 

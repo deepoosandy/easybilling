@@ -25,7 +25,7 @@ public class EditExistingItemServiceImpl implements IEditExistingItemService {
 
     @Override
     public List<ItemWrapper> listSearchedItem(String query) {
-        List<ItemDetailsMaster> domainItems = itemRepository.listAllItems();
+        List<ItemDetailsMaster> domainItems = itemRepository.findAll();
         List<Item>items=null;
         if (StringUtils.isEmpty(query)) {
             items=  domainItems.stream().limit(15).map(ItemDetailsMapper::itemDetailsToItemDto).collect(Collectors.toList());
@@ -42,21 +42,23 @@ public class EditExistingItemServiceImpl implements IEditExistingItemService {
 
     @Override
     public Item fetchSearchedItem(String itemCode) {
-        ItemDetailsMaster itemDetailsMaster= itemRepository.itembyItemCode(itemCode);
+        ItemDetailsMaster itemDetailsMaster= itemRepository.findByItemCode(itemCode);
 
         return ItemDetailsMapper.itemDetailsToItemDto(itemDetailsMaster);
     }
 
     @Override
     public Item saveItem(Item item) {
-        itemRepository.save(ItemDetailsMapper.itemDtoToDomain(item));
+        ItemDetailsMaster itemMaster=  ItemDetailsMapper.itemDtoToDomain(item);
+        itemMaster.setId(item.getItemId());
+        itemRepository.save(itemMaster);
         return null;
     }
 
     @Override
     public Item updateExistingWithThruDate(Item item) {
 
-        ItemDetailsMaster itemDetailsMaster=itemRepository.itembyItemCode(item.getItemCode());
+        ItemDetailsMaster itemDetailsMaster=itemRepository.findByItemCode(item.getItemCode());
         itemDetailsMaster.getUnitPriceTs().stream().forEach(itemsUnitPrice->{
             itemsUnitPrice.setThruDt(DateUtility.todaysDate());
         });

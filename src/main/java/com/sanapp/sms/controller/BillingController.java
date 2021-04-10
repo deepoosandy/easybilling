@@ -97,9 +97,9 @@ public class BillingController {
     @GetMapping(value={"/next","/printbill","/backtobilling"})
     public String billingNextPage(Model model) {
         int lastInvoiceCount = invoiceRepository.lastBilledInvoice();
-        ShopDetailsMaster shopetailsMaster = shopDetailsRepository.findById(Long.valueOf(1)).get();
+       List< ShopDetailsMaster> shopetailsMaster = shopDetailsRepository.findAll();
         String invoiceNumber = InvoiceNumberGenerator.createInvoiceNumber(lastInvoiceCount,
-                shopetailsMaster.getInvoicePrefix());
+                shopetailsMaster.get(0).getInvoicePrefix());
         InvoiceDto invoiceDto=new InvoiceDto();
         invoiceDto.setInvoiceNumber(invoiceNumber);
         ItemDetailsMapper.populateInvoiceDto(addToBillList,invoiceDto);
@@ -121,7 +121,7 @@ public class BillingController {
         invoiceDto.setBillingAddress(invoiceDtoFromUI.getBillingAddress());
     }*/
 
-    @PostMapping("/printbill")
+    @PostMapping(value={"/printbill"} )
     public String generatePdf(Model model,@ModelAttribute("nextDetailsOfBill") InvoiceDto invoiceDtoFromUI){
 
         ShopDetailsDto shopDetailsDto= shopDetailsService.shopDetials();

@@ -146,6 +146,15 @@
     <script th:src="@{webjars/jspdf/1.4.1/dist/jspdf.min.js}"></script>
     <script>
   function printDiv() {
+
+  $.ajax({
+   url: 'ajaxfile.php',
+   type: 'post',
+   //data: {name:'yogesh',salary: 35000,email: 'yogesh@makitweb.com'},
+   success: function(response){
+
+   }
+});
             var divContents = document.getElementById("printIt").innerHTML;
             var a = window.open("", "", "width=500,height=400");
             a.document.write('<html>');

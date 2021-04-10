@@ -66,10 +66,6 @@ padding: 20px;
         <a href="#"  class="btn btn-success float-right " style="position: absolute; left:248px; top: 65%;background-color: #3f51b5 !important;"  th:href="@{/addItemManual}">Add Item Manual</a>
     </div>
 
-
-    <div th:if="${message}">
-        <h2 th:text="${message}"/>
-    </div>
 </div>
 
 <br><br>
@@ -115,17 +111,6 @@ padding: 20px;
       </form>
     </div>
 
-
-<!--</div>-->
-
-
-<!--<div class="container" style="  position: absolute; left: 90px; top: 250px">-->
-    <div style="text-align:center">
-        <div th:if="${isItemInSystem}">
-            <span th:text="${msg}" style="font-size:50px; color:red;"/>
-        </div>
-    </div>
-
     <div th:if= "${alreadyUploadedItems != ''}">
         <tr th><td colspan="7"> <span th:text="${alreadyUploadedItems}" style="font-size:15px; color:red;"/> </td></tr>
     </div>
@@ -149,13 +134,13 @@ padding: 20px;
         </thead>
         <tbody>
         <tr th:each="itemDetail : ${excelItemDetails}" >
-            <td style="text-align:center"><span th:text="${itemDetail.rowNumber}" > Title </span></td>
-            <td style="text-align:center"><span th:text="${itemDetail.itemName}" > Author </span></td>
-            <td style="text-align:center"><span th:text="${itemDetail.itemDescription}"> Title </span></td>
-            <td style="text-align:center"><span th:text="${itemDetail.itemUnitPrice}" > Author </span></td>
-            <td style="text-align:center"><span th:text="${itemDetail.date}" > Title </span></td>
-            <td style="text-align:center"><span th:text="${itemDetail.itemCode}" > Title </span></td>
-            <td style="text-align:center"><span th:text="${itemDetail.measurementUnit}" > Title </span></td>
+            <td style="text-align:center"><span th:text="${itemDetail.rowNumber}" > Row Number </span></td>
+            <td style="text-align:center"><span th:text="${itemDetail.itemName}" > Item Name </span></td>
+            <td style="text-align:center"><span th:text="${itemDetail.itemDescription}"> Item Description </span></td>
+            <td style="text-align:center"><span th:text="${itemDetail.itemUnitPrice}" > Item Unit Price </span></td>
+            <td style="text-align:center"><span th:text="${itemDetail.date}" > Date </span></td>
+            <td style="text-align:center"><span th:text="${itemDetail.itemCode}" > Item Code </span></td>
+            <td style="text-align:center"><span th:text="${itemDetail.measurementUnit}" > Measurement Unit</span></td>
 
             <td style="text-align:center"><a  href="#" th:href="@{/editrecord(rowId=${itemDetail.rowNumber})}">
 

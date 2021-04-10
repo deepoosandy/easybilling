@@ -6,6 +6,7 @@ import com.sanapp.sms.dto.UploadEditForm;
 import com.sanapp.sms.services.IItemUploadService;
 import com.sanapp.sms.services.IMeasurementService;
 import com.sanapp.sms.utils.ExcelUtils;
+import com.sanapp.sms.utils.SMSConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DataAccessException;
@@ -40,10 +41,11 @@ public class UploadController {
     private IMeasurementService iMeasurementService;
 
 
-    @GetMapping(value = {"/upload","/saveinsystem"})
+    @GetMapping(value = {"/upload", "/saveinsystem"})
     public String uploadLandingPage(Model model) {
-        model.addAttribute("isItemInSystem", iItemUploadService.showIsItemInSystemOrNot());
-        model.addAttribute("msg", "No item Uploaded!");
+        if(iItemUploadService.showIsItemInSystemOrNot()){
+            model.addAttribute("info", "No item Uploaded!");
+        }
         return "upload";
     }
 
@@ -53,7 +55,7 @@ public class UploadController {
         try {
             itemDetails = ExcelUtils.parseExcelFile(file.getInputStream());
         } catch (Exception excelException) {
-            model.addAttribute("msg", "Uploaded Excel is not in correct format.");
+            model.addAttribute("error", "Uploaded Excel is not in correct format.");
             return "upload";
         }
 
@@ -61,7 +63,7 @@ public class UploadController {
             itemDetailsById = itemDetails.stream().collect(Collectors.toMap(ItemDetail::getRowNumber, item -> item));
             String alreadyUploadedItems = iItemUploadService.excelUploadItems(itemDetails);
             if (!alreadyUploadedItems.isEmpty()) {
-                model.addAttribute("alreadyUploadedItems", alreadyUploadedItems);
+                model.addAttribute("warning", alreadyUploadedItems);
             }
             model.addAttribute("excelItemDetails", itemDetails);
         }
@@ -76,40 +78,31 @@ public class UploadController {
     }
 
     @PostMapping("/saveinsystem")
-    public String saveinsystem(Model model) throws IOException {
-        boolean isAddedMsg = Boolean.FALSE;
+    public String saveInSystem(Model model) throws IOException {
         try {
             if (itemDetails != null) {
                 String alreadyUploadedItems = iItemUploadService.excelUploadItems(itemDetails);
                 if (!alreadyUploadedItems.isEmpty()) {
-                    model.addAttribute("alreadyUploadedItems", "Some of the records already exists in the System.");
+                    model.addAttribute(SMSConstants.WARNING_KEY, SMSConstants.ALREADY_EXIST_WARNING);
                     clearItemDetailsData(itemDetails);
-                    return "upload";
                 } else {
                     iItemUploadService.uploadItems(itemDetails);
                     clearItemDetailsData(itemDetails);
+                    model.addAttribute(SMSConstants.SUCCESS_KEY, SMSConstants.SAVED_SUCCESS_MSG);
                 }
 
-            }else{
-                model.addAttribute("isItemInSystem", "true");
-                model.addAttribute("info", "First upload data through excel then only you can save that in the system!");
+            } else {
+                model.addAttribute(SMSConstants.INFO_KEY, SMSConstants.UPLOAD_WARNING_MSG);
             }
         } catch (DataAccessException exception) {
-            model.addAttribute("isItemInSystem", "true");
-            model.addAttribute("msg", "Uploaded data is not correct!");
-            isAddedMsg = Boolean.TRUE;
+            model.addAttribute(SMSConstants.ERROR_KEY, "Uploaded data is not correct!");
             clearItemDetailsData(itemDetails);
         }
-        if (!isAddedMsg && itemDetails != null) {
-            model.addAttribute("isItemInSystem", "true");
-            model.addAttribute("msg", "Saved in System Successfully! ");
-        }
-
 
         return "upload";
     }
 
-    @GetMapping(value={"/editrecord"})
+    @GetMapping(value = {"/editrecord"})
     public String editRecord(Model model, @RequestParam("rowId") int rowId) {
         if (itemDetails != null) {
             ItemDetail item = itemDetailsById.get(rowId);
@@ -139,8 +132,8 @@ public class UploadController {
     }
 
     @GetMapping("/addItemManual")
-    public String addItemManually(Model model){
-        model.addAttribute("allMeasurements",iMeasurementService.listAllMeasurements());
+    public String addItemManually(Model model) {
+        model.addAttribute("allMeasurements", iMeasurementService.listAllMeasurements());
         model.addAttribute("manualItemAdd", new Item());
         return "upload";
     }
