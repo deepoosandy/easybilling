@@ -4,4 +4,5 @@ import com.sanapp.sms.dto.ShopDetailsDto;
 
 public interface IShopDetailsService {
     ShopDetailsDto shopDetials();
+    ShopDetailsDto saveShopDetails(ShopDetailsDto shopDetailsDto);
 }

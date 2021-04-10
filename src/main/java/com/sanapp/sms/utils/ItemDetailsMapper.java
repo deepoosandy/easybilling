@@ -165,4 +165,22 @@ public class ItemDetailsMapper {
 
         return measurement;
     }
+
+    public static ShopDetailsMaster dtoToDomain( ShopDetailsDto  shopDetailsDto){
+        ShopDetailsMaster shopDetailsMaster =new ShopDetailsMaster();
+        shopDetailsMaster.setBankAccountNumber(shopDetailsDto.getBankAccountNumber());
+        shopDetailsMaster.setBankIfscNumber(shopDetailsDto.getBankIfscCode());
+        shopDetailsMaster.setBankAccountName(shopDetailsDto.getBankName());
+        shopDetailsMaster.setDistrict(shopDetailsDto.getDistrict());
+        shopDetailsMaster.setShopGstNumber(shopDetailsDto.getGstIN());
+        shopDetailsMaster.setShopName(shopDetailsDto.getShopName());
+        shopDetailsMaster.setShopDescription(shopDetailsDto.getShopDescription());
+        shopDetailsMaster.setPhoneNumber1(shopDetailsDto.getPhoneNumber1());
+        shopDetailsMaster.setPhoneNumber2(shopDetailsDto.getPhoneNumber2());
+        shopDetailsMaster.setState(shopDetailsDto.getState());
+        shopDetailsMaster.setInvoicePrefix(shopDetailsDto.getInvoicePre());
+        shopDetailsMaster.setPincode(shopDetailsDto.getPinCode());
+        shopDetailsMaster.setShopAddress1(shopDetailsDto.getShopAddress());
+        return shopDetailsMaster;
+    }
 }

@@ -27,6 +27,8 @@
 
     </div>
     <ul class="nav navbar-nav">
+      <li ><a href="#" th:href="@{/firmsetup}">Setup Firm</a></li>
+      <li ><a href="#" th:href="@{/upload}">Upload Item</a></li>
       <li ><a href="#" th:href="@{/upload}">Upload Item</a></li>
       <li><a  href="#" th:href="@{/editpage}">Edit Item</a></li>
       <li><a  href="#" th:href="@{/listAll}">List Items</a></li>
@@ -40,7 +42,7 @@
           <span sec:authentication="name"></span>
         </a>
       </li>
-      <li><a href="#" th:href="@{/logout}" ><span class="glyphicon glyphicon-log-in" th:text="#{text.menu.signout}"></span>
+      <li><a href="#" th:href="@{/logout}" ><span class="glyphicon glyphicon-log-in" >Sign Out</span>
       </a></li>
     </ul>
   </div>
