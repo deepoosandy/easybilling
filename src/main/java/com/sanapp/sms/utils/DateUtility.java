@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DateUtility {
                                             //dd-MM-yyyy HH:mm:ss
-    private final static String dateFormat = "dd-MM-yyyy  HH:mm:ss";
+    private final static String dateFormat = "dd-MM-yyyy HH:mm:ss";
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
 

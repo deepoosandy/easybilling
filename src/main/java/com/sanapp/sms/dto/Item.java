@@ -9,4 +9,5 @@ public class Item {
     private double itemUnitPrice;
     private String itemDescription;
     private String measurementUnit;
+    private long itemId;
 }

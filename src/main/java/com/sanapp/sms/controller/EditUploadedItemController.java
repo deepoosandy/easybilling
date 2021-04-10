@@ -47,6 +47,7 @@ public class EditUploadedItemController {
         editExistingItemService.updateExistingWithThruDate(savedItem);
 
         //Updating exisiting Item with new data.
+        item.setItemId(savedItem.getItemId());
         editExistingItemService.saveItem(item);
         model.addAttribute("itemList", new ItemList());
         model.addAttribute("showForm", false);
