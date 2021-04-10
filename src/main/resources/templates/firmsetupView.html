@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<style>
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+
+</style>
+<head>
+    <title>Firm setup</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+</head>
+<body>
+<div th:replace="/fragments/other-header :: other-header"/>
+
+<div class="container">
+    <H1 style="margin-top: 0px; margin-bottom: 40px"> Firm Details</H1>
+    <div class="card">
+        <div class="form-group row">
+            <label for="shopNameId" class="control-label col-sm-2">Shop Name:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.shopName}" id="shopNameId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="shopAddressId" class="control-label col-sm-2">Shop Address:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.shopAddress}" id="shopAddressId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="districtId" class="control-label col-sm-2">District:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.district}" id="districtId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="stateId" class="control-label col-sm-2">State:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.state}" id="stateId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="pinCodeId" class="control-label col-sm-2">Pin Code:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.pinCode}" id="pinCodeId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="phoneNumber1Id" class="control-label col-sm-2">Phone Number1:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.phoneNumber1}" id="phoneNumber1Id"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="phoneNumber2Id" class="control-label col-sm-2">Phone Number2:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.phoneNumber2}" id="phoneNumber2Id"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="shopDescriptionId" class="control-label col-sm-2">Shop Description:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.shopDescription}" id="shopDescriptionId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="gstINId" class="control-label col-sm-2">GSTIN:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.gstIN}" id="gstINId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="bankNameId" class="control-label col-sm-2">Bank Name:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.bankName}" id="bankNameId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="bankAccountNumberId" class="control-label col-sm-2">Bank Account Number:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.bankAccountNumber}" id="bankAccountNumberId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="bankIfscCodeId" class="control-label col-sm-2">Bank IFSC Code:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.bankIfscCode}" id="bankIfscCodeId"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="invoicePreId" class="control-label col-sm-2">Invoice Prefix:</label>
+            <div class="col-sm-10">
+                <span th:text="${savedFirmDetails.invoicePre}" id="invoicePreId"/>
+            </div>
+        </div>
+
+
+    </div>
+    <a href="#"  class="btn btn-primary" th:href="@{/editfirmDetails}"  style="position: absolute;left: 79%;top:15%">Edit Details</a>
+</div>
+<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<style>
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+</style>
+<head>
+    <title>Firm setup</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+</head>
+<body>
+<div th:replace="/fragments/other-header :: other-header"/>
+
+<div class="container">
+    <H1 style="margin-top: 0px; margin-bottom: 40px"> Firm Details</H1>
+    <div class="card">
+        <form action="/savefirmdetails" method="post" th:object="${firmsetup}">
+            <div class="form-group row">
+                <label for="shopNameId" class="control-label col-sm-2">Shop Name:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{shopName}" id="shopNameId" placeholder="Shop name.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="shopAddressId" class="control-label col-sm-2">Shop Address:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{shopAddress}" id="shopAddressId" placeholder="Shop address.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="districtId" class="control-label col-sm-2">District:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{district}" id="districtId" placeholder="District.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="stateId" class="control-label col-sm-2">State:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{state}" id="stateId" placeholder="State.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="pinCodeId" class="control-label col-sm-2">Pin Code:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{pinCode}" id="pinCodeId" placeholder="Pin code.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="phoneNumber1Id" class="control-label col-sm-2">Phone Number1:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{phoneNumber1}" id="phoneNumber1Id" placeholder="Phone number1.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="phoneNumber2Id" class="control-label col-sm-2">Phone Number2:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{phoneNumber2}" id="phoneNumber2Id" placeholder="Phone number2.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="shopDescriptionId" class="control-label col-sm-2">Shop Description:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{shopDescription}" id="shopDescriptionId" placeholder="Item description.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="gstINId" class="control-label col-sm-2">GSTIN:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{gstIN}" id="gstINId" placeholder="Item description.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="bankNameId" class="control-label col-sm-2">Bank Name:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{bankName}" id="bankNameId" placeholder="Bank Name.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="bankAccountNumberId" class="control-label col-sm-2">Bank Account Number:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{bankAccountNumber}" id="bankAccountNumberId" placeholder="Bank account number.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="bankIfscCodeId" class="control-label col-sm-2">Bank IFSC Code:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{bankIfscCode}" id="bankIfscCodeId" placeholder="Bank IFSC Code.." required>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="invoicePreId" class="control-label col-sm-2">Invoice Prefix:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" th:field="*{invoicePre}" id="invoicePreId" placeholder="Invoice prefix.." required>
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-10 pull-right">
+                    <button type="submit" class="btn btn-primary">Save Details</button>
+                </div>
+            </div>
+        </form>
+        </form>
+    </div>
+
+</div>
+<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>

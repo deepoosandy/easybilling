@@ -7,6 +7,8 @@ import com.sanapp.sms.utils.ItemDetailsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ShopDetailsServiceImpl implements IShopDetailsService {
     @Autowired
@@ -14,11 +16,26 @@ public class ShopDetailsServiceImpl implements IShopDetailsService {
 
     @Override
     public ShopDetailsDto shopDetials() {
-        ShopDetailsMaster shopetailsMaster = shopDetailsRepository.findById(Long.valueOf(1)).get();
-        ShopDetailsDto shopDetailsDto=new ShopDetailsDto();
-        if(shopetailsMaster!=null ){
-            shopDetailsDto= ItemDetailsMapper.domainToDto(shopetailsMaster);
+        ShopDetailsDto shopDetailsDto = null;
+        List<ShopDetailsMaster> shopDetails = shopDetailsRepository.findAll();
+        if (shopDetails != null && !shopDetails.isEmpty()) {
+            ShopDetailsMaster shopDetailsMaster = shopDetails.get(0);
+            shopDetailsDto = ItemDetailsMapper.domainToDto(shopDetailsMaster);
         }
+
         return shopDetailsDto;
+    }
+
+    @Override
+    public ShopDetailsDto saveShopDetails(ShopDetailsDto shopDetailsDto) {
+        ShopDetailsMaster newshopDetailsMaster = ItemDetailsMapper.dtoToDomain(shopDetailsDto);
+        ShopDetailsMaster shopDetailsMaster = null;
+        List<ShopDetailsMaster> shopDetails = shopDetailsRepository.findAll();
+        if (shopDetails != null && !shopDetails.isEmpty()) {
+            shopDetailsMaster = shopDetails.get(0);
+            newshopDetailsMaster.setId(shopDetailsMaster.getId());
+        }
+        shopDetailsMaster = shopDetailsRepository.save(newshopDetailsMaster);
+        return ItemDetailsMapper.domainToDto(shopDetailsMaster);
     }
 }
