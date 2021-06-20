@@ -11,5 +11,4 @@ public class ListItemDetails {
     private String itemDescription;
     private String uploadedDate;
     private ItemUnitPrice itemUnitPrice;
-
 }
