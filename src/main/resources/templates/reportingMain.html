@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Reporting</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+    <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
+
+    <script src="/js/jqueryScript.js"></script>
+</head>
+<body>
+<div th:replace="fragments/other-header :: other-header"/>
+
+<div class="container">
+    <div class="row">
+    <select>
+        <option value="inv" selected>Invoice</option>
+        <option value="item">Item</option>
+    </select>
+    </div>
+
+    <div style="margin-bottom:20px; padding:10px; background-color:#337ab7; color:white;">
+        <p>Type some text to search the table for <strong>Item Code</strong>, <strong>Item Name</strong>, <strong>Item Description</strong>,
+            <strong>Item Uploaded Date</strong>, <Strong>Item Unit Price</Strong>, <strong>Item eff. Date</strong>, <strong>Item thru. Date</strong>:</p>
+        <input class="form-control" id="invoiceFilter" type="text" placeholder="Search.." />
+    </div>
+    <table id="invoiceTable" class="table table-bordered table-hover table-responsive">
+        <thead>
+        <tr>
+            <th>Invoice Number</th>
+            <th>Invoice Date</th>
+            <th>Invoice Amount</th>
+            <th>Total Items In Invoice</th>
+            <th>Bill To</th>
+            <th>Billing Phone Number</th>
+            <th>Billing Address</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+
+
+
+
+
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+    <script>
+$(document).ready(function() {
+
+	// DO GET
+	$.ajax({
+		type : "GET",
+		url : "/listAllInvoices",
+		success: function(result){
+			$.each(result, function(i, listInvoices){
+				var customerRow = '<tr>' +
+									'<td><a href=\'#\'>' + listInvoices.invoiceNumber + '</a></td>' +
+									'<td>' + listInvoices.billingDate + '</td>' +
+									'<td>' + listInvoices.billingTotalAmount + '</td>' +
+									'<td>' + listInvoices.totalItemsInbill + '</td>' +
+									'<td>' + listInvoices.billTo + '</td>' +
+									'<td>' + listInvoices.phoneNumber+ '</td>' +
+									'<td>' + listInvoices.billingAddress + '</td>' +
+
+								  '</tr>';
+
+				$('#invoiceTable tbody').append(customerRow);
+
+	        });
+
+			$( "#invoiceTable tbody tr:odd" ).addClass("info");
+			$( "#invoiceTable tbody tr:even" ).addClass("success");
+		},
+		error : function(e) {
+			alert("ERROR: ", e);
+			console.log("ERROR: ", e);
+		}
+	});
+
+	// do Filter on View
+	$("#invoiceFilter").on("keyup", function() {
+	    var inputValue = $(this).val().toLowerCase();
+	    $("#invoiceTable tr").filter(function() {
+	    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+	    });
+	});
+})
+</script>
+</div>
+</body>
+</html>

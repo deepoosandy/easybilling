@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query(value = "select MAX(totol_invoice_generated) from invoice", nativeQuery = true)
     int lastBilledInvoice();
+
 }

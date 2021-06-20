@@ -88,6 +88,7 @@ public class ItemDetailsMapper {
             addToBill.setItemCode(listItemDetails.getItemCode());
             addToBill.setItemName(listItemDetails.getItemName());
             addToBill.setItemUnitPrice(listItemDetails.getItemUnitPrice().getItemUnitPrice());
+            addToBill.setMeasurementCode(listItemDetails.getItemUnitPrice().getMeasurementUnit());
         }
         return addToBill;
     }
@@ -190,4 +191,52 @@ public class ItemDetailsMapper {
         shopDetailsMaster.setShopAddress1(shopDetailsDto.getShopAddress());
         return shopDetailsMaster;
     }
+
+    public static Invoice   InvoiceDtoToInvoiceDomain(InvoiceDto invoiceDto){
+        Invoice invoice=new Invoice();
+        invoice.setInvoiceDate(invoiceDto.getBillingDate());
+        invoice.setInvoiceNumber(invoiceDto.getInvoiceNumber());
+        List<ItemOfInvoice> itemOfInvoices=new ArrayList<>();
+        invoiceDto.getItemsForbill().forEach(x->{
+            ItemOfInvoice itemOfInvoice=new ItemOfInvoice();
+            itemOfInvoice.setInvoice(invoice);
+            itemOfInvoice.setItemCode(x.getItemCode());
+            itemOfInvoice.setItemUnitPrice(x.getItemUnitPrice());
+            itemOfInvoice.setItemQuantity(x.getItemQuantity());
+            itemOfInvoice.setItemMeasurementCode(x.getMeasurementCode());
+            itemOfInvoice.setSellingDate(invoiceDto.getBillingDate());
+            itemOfInvoices.add(itemOfInvoice);
+        });
+
+        invoice.setItemOfInvoices(itemOfInvoices);
+        invoice.setBilledItemCount(invoiceDto.getTotalItemsInbill());
+        invoice.setBillingAddress(invoiceDto.getBillingAddress());
+        invoice.setBillingPhoneNumber(invoiceDto.getPhoneNumber());
+        invoice.setBillTo(invoiceDto.getBillTo());
+        invoice.setBillTotalAmount(invoiceDto.getBillingTotalAmount());
+        return invoice;
+    }
+
+    public static InvoiceDto invoiceDomainToInvoiceDto(Invoice invoice){
+        InvoiceDto invoiceDto=new InvoiceDto();
+        invoiceDto.setInvoiceNumber(invoice.getInvoiceNumber());
+        invoiceDto.setBillingAddress(invoice.getBillingAddress()!=null?invoice.getBillingAddress():"");
+        invoiceDto.setBillTo(invoice.getBillTo()!=null?invoice.getBillTo():"");
+        invoiceDto.setBillingTotalAmount(invoice.getBillTotalAmount());
+        invoiceDto.setPhoneNumber(invoice.getBillingPhoneNumber()!=null?invoice.getBillingPhoneNumber():"");
+        invoiceDto.setBillingDate(invoice.getInvoiceDate());
+        invoiceDto.setTotalItemsInbill(invoice.getBilledItemCount());
+        return invoiceDto;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 package com.sanapp.sms.controller;
 
+import com.sanapp.sms.domain.Invoice;
 import com.sanapp.sms.domain.ShopDetailsMaster;
 import com.sanapp.sms.dto.AddToBill;
 import com.sanapp.sms.dto.InvoiceDto;
@@ -46,7 +47,7 @@ public class BillingController {
     @Autowired
     private IShopDetailsService shopDetailsService;
 
-    @GetMapping(value={"/billing","/addtobill"})
+    @GetMapping(value = {"/billing", "/addtobill"})
     public String billingLandingPage(Model model) {
         if (addToBillList != null) {
             addToBillList.clear();
@@ -94,21 +95,21 @@ public class BillingController {
         return "billing";
     }
 
-    @GetMapping(value={"/next","/printbill","/backtobilling"})
+    @GetMapping(value = {"/next", "/printbill", "/backtobilling"})
     public String billingNextPage(Model model) {
         int lastInvoiceCount = invoiceRepository.lastBilledInvoice();
-       List< ShopDetailsMaster> shopetailsMaster = shopDetailsRepository.findAll();
+        List<ShopDetailsMaster> shopetailsMaster = shopDetailsRepository.findAll();
         String invoiceNumber = InvoiceNumberGenerator.createInvoiceNumber(lastInvoiceCount,
                 shopetailsMaster.get(0).getInvoicePrefix());
-        InvoiceDto invoiceDto=new InvoiceDto();
+        InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setInvoiceNumber(invoiceNumber);
-        ItemDetailsMapper.populateInvoiceDto(addToBillList,invoiceDto);
+        ItemDetailsMapper.populateInvoiceDto(addToBillList, invoiceDto);
         model.addAttribute("nextDetailsOfBill", invoiceDto);
         return "billingNext";
     }
 
     @GetMapping("/backtoprevious")
-    private String backToPrevious(Model model){
+    private String backToPrevious(Model model) {
 
         model.addAttribute(SMSConstants.ADD_TO_BILL, new AddToBill());
         model.addAttribute("addedInBill", addToBillList);
@@ -121,13 +122,19 @@ public class BillingController {
         invoiceDto.setBillingAddress(invoiceDtoFromUI.getBillingAddress());
     }*/
 
-    @PostMapping(value={"/printbill"} )
-    public String generatePdf(Model model,@ModelAttribute("nextDetailsOfBill") InvoiceDto invoiceDtoFromUI){
+    @PostMapping(value = {"/printbill"})
+    public String generatePdf(Model model, @ModelAttribute("nextDetailsOfBill") InvoiceDto invoiceDtoFromUI) {
 
-        ShopDetailsDto shopDetailsDto= shopDetailsService.shopDetials();
-        ItemDetailsMapper.populateInvoiceDto(addToBillList,invoiceDtoFromUI);
+        ShopDetailsDto shopDetailsDto = shopDetailsService.shopDetials();
+        ItemDetailsMapper.populateInvoiceDto(addToBillList, invoiceDtoFromUI);
+
+        Invoice invoice = ItemDetailsMapper.InvoiceDtoToInvoiceDomain(invoiceDtoFromUI);
+        String[] number = invoiceDtoFromUI.getInvoiceNumber().split(shopDetailsDto.getInvoicePre());
+        invoice.setTotolInvoiceGenerated(Integer.parseInt(number[1]));
+        invoiceRepository.save(invoice);
         model.addAttribute("shopDetails", shopDetailsDto);
         model.addAttribute("nextDetailsOfBill", invoiceDtoFromUI);
+
         return "invoice";
     }
 

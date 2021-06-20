@@ -11,6 +11,7 @@ private double itemUnitPrice;
 private String itemSum;
 private String itemName;
 private int rowNumber;
+private  String measurementCode;
 
 
 }
