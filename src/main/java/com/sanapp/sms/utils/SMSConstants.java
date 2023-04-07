@@ -12,4 +12,5 @@ public class SMSConstants {
     public static final String ALREADY_EXIST_WARNING = "Some of the records already exists in the System.";
     public  static final String SAVED_SUCCESS_MSG="Saved in System Successfully! ";
     public static final String UPLOAD_WARNING_MSG="First upload data through excel then only you can save that in the system!";
+    public static final String ADD_MISTRIPAYMENT_DETAILS = "addToMistriPaymentDetails";
 }

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+
+.next {
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  float: right;
+  margin: 50px;
+}
+
+a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+}
+
+a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+td {
+    vertical-align: bottom;
+}
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+input[type=text], select {
+
+  padding: 12px 20px;
+  margin: 8px 0;
+
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+
+</style>
+
+
+<head>
+  <title>Add MistriPayment Details</title>
+  <link rel="stylesheet" type="text/css"
+        href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+  <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
+  <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
+  <link th:href="@{/main.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<div th:replace="fragments/other-header :: other-header"/>
+
+<div class="container">
+  <div>
+    <form th:action="@{/addToMistriPaymentDetails}" id="mistriForm" th:object="${mistriPaymentDto}" method="POST">
+
+      <label for="paymentDescription" style="margin-right:5px">Payment Description:</label>
+      <textarea type="text" class="form-control text-green-600" id="paymentDescription"
+                th:field="*{paymentDescription}" style="font-size:15px; "/>
+      <div class="form-inline">
+        <div class="form-group ">
+          <label for="paymentAmount" style=" margin-right:5px">Payment Amount:</label>
+          <input type="text" class="form-control" style="margin-left:50px" id="paymentAmount"
+                 th:field="*{paymentAmount}" placeholder="Enter item rate!" onchange="addItemPrice(this)"/>
+        </div>
+        <div class="form-group  " style="margin-left:83px">
+          <label for="paymentDate" style="margin-right:5px">Payment Date:</label>
+          <input type="datetime-local" class="form-control text-green-600" id="paymentDate"
+                 th:field="*{paymentDate}" style="font-size:15px; "/>
+        </div>
+      </div>
+      <button class="btn btn-default btn-sm" style="outline: none; box-shadow: none; color:#5cb85c;"
+              id="addToPayment" type="submit"
+              onclick="return validateMistriPaymentForm();">
+        <span class="glyphicon glyphicon-plus"></span> Add Payment
+      </button>
+
+    </form>
+    <div th:unless="${#lists.isEmpty(addedInMistriPaymentList)}">
+      <a href="#"  class="btn btn-primary" th:href="@{/saveMistriPayment}"  style="position: absolute;left: 79%;top:81%">Save Mistri payment Details</a>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <div th:unless="${#lists.isEmpty(addedInMistriPaymentList)}">
+    <h2>Payment Details</h2>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Payment Description</th>
+        <th>Payment Amount</th>
+        <th>Payment Date</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="mistripaumentDetails : ${addedInMistriPaymentList}">
+        <td><span th:text="${mistripaumentDetails.rowNum}"> Title </span></td>
+        <td><span th:text="${mistripaumentDetails.paymentDescription}"> Title </span></td>
+        <td><span th:text="${mistripaumentDetails.paymentAmount}"> Author </span></td>
+        <td><span th:text="${mistripaumentDetails.paymentDate}"> Title </span></td>
+        <td><a href="#" th:href="@{/deleteFromMistriPaymentList(rowId=${mistripaumentDetails.rowNum})}">
+          <span class="glyphicon glyphicon-trash" style="text-align:center; font-size:20px;color:red;"></span>
+        </a></td>
+      </tr>
+
+
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+
+
+<script>
+
+function validateMistriPaymentForm(){
+
+var paymentDescription=  document.getElementById('paymentDescription').value
+var paymentAmount=  document.getElementById('paymentAmount').value
+var paymentDate=  document.getElementById('paymentDate').value
+
+if(paymentDescription===''){
+alert("Please fill Payment description!");
+return false;
+}
+if(paymentAmount===''){
+alert("Please fill payment amount!");
+return false;
+}
+
+if(paymentDate===''){
+alert("Please select payment date!");
+return false;
+}
+ return true;
+}
+
+function addItemPrice(inputValue){
+var itemUnitPrice= document.getElementById('itemPrice').value;
+var output =itemUnitPrice.split("/");
+
+var total= inputValue.value * (output[0]).trim();
+document.getElementById('itemSum').value=total;
+//billingId
+
+}
+function validateAddedList(){
+
+}
+
+function unitPrice(inputValue){
+
+ $.ajax({
+        type : "GET",
+        url: "/billing/item/?itemCode="+inputValue.value,
+        success: function(result){
+                       var code=result.itemUnitPrice.measurementUnit;
+                       var itemCode=result.itemCode;
+                       var unitPrice= result.itemUnitPrice.itemUnitPrice;
+                       $.ajax({
+                        type : "GET",
+                        url: "/measurement/id/?code="+code,
+                        success: function(result1 ){
+                         $('#itemPrice').val( unitPrice+ ' / ' +result1);
+                         $('#itemPriceHidden').val(itemCode);
+
+                         }
+
+                                });
+
+        }
+
+   });
+
+}
+
+    $("#itemlist1").select2({
+        theme: "bootstrap4",
+        ajax: {
+            url: '/listitems',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (response) {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    });
+
+
+
+
+
+</script>
+
+</body>
+</html>

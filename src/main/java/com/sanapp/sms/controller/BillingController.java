@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,9 @@ public class BillingController {
     private int rowNumber;
 
     @Autowired
+    private TestService testService;
+
+    @Autowired
     private IBillingService billingService;
 
     @Autowired
@@ -46,6 +50,8 @@ public class BillingController {
 
     @Autowired
     private IShopDetailsService shopDetailsService;
+
+
 
     @GetMapping(value = {"/billing", "/addtobill"})
     public String billingLandingPage(Model model) {

@@ -18,6 +18,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	// https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4
 	implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
+// https://mvnrepository.com/artifact/com.itextpdf/itextpdf
+	implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.3'
 
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	// https://mvnrepository.com/artifact/org.webjars/bootstrap
