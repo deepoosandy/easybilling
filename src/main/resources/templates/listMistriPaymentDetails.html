@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Mistri Payment Details</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+    <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
+
+    <script src="/js/jqueryScript.js"></script>
+</head>
+<body>
+<div th:replace="fragments/other-header :: other-header"/>
+<div id="print-content" >
+    <a href="#"  class="btn btn-primary" th:href="@{/mistriReport}"  style="position: absolute;left: 79%;top:15%">Download Expense Report</a>
+</div>
+<div class="container">
+
+
+    <div style="margin-bottom:20px; padding:10px; background-color:#337ab7; color:white;">
+        <p>Type some text to search the table for <strong>Payment Description</strong>, <strong>Payment Date</strong>, <strong>Payment Amount</strong>,
+            :</p>
+        <input class="form-control" id="invoiceFilter" type="text" placeholder="Search.."/>
+    </div>
+    <div id="printIt">
+        <table id="expenseTable" class="table table-bordered table-hover table-responsive">
+            <thead>
+            <tr>
+                <th>Payment Description</th>
+                <th>Payment Date</th>
+                <th>Payment Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+    <script th:src="@{webjars/jspdf/1.4.1/dist/jspdf.min.js}"></script>
+    <script>
+$(document).ready(function() {
+
+	// DO GET
+	$.ajax({
+		type : "GET",
+		url : "/listMistriPaymentDetails",
+		success: function(result){
+			$.each(result, function(i, listMistriPaymentDetails){
+				var customerRow = '<tr>' +
+									'<td><a href=\'#\'>' + listMistriPaymentDetails.paymentDescription + '</a></td>' +
+									'<td>' + listMistriPaymentDetails.paymentDate + '</td>' +
+									'<td>' + listMistriPaymentDetails.paymentAmount + '</td>' +
+								  '</tr>';
+
+				$('#expenseTable tbody').append(customerRow);
+
+	        });
+
+			$( "#expenseTable tbody tr:odd" ).addClass("info");
+			$( "#expenseTable tbody tr:even" ).addClass("success");
+		},
+		error : function(e) {
+			alert("ERROR: ", e);
+			console.log("ERROR: ", e);
+		}
+	});
+
+	// do Filter on View
+	$("#invoiceFilter").on("keyup", function() {
+	    var inputValue = $(this).val().toLowerCase();
+	    $("#expenseTable tr").filter(function() {
+	    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+	    });
+	});
+})
+
+
+function printDiv() {
+
+  $.ajax({
+   url: 'ajaxfile.php',
+   type: 'post',
+   //data: {name:'yogesh',salary: 35000,email: 'yogesh@makitweb.com'},
+   success: function(response){
+
+   }
+});
+            var divContents = document.getElementById("printIt").innerHTML;
+            var a = window.open("", "", "width=500,height=400");
+            a.document.write('<html>');
+            a.document.write('<head>');
+            a.document.write(' <link href="/main.css" rel="stylesheet"/>');
+            a.document.write('</head>');
+            a.document.write('<body >');
+            a.document.write(divContents);
+            a.document.write('</body></html>');
+            a.document.close();
+            a.print();
+         setTimeout(function() {
+				//$('#alert_placeholder').fadeOut('fast');
+				a.close();
+			}, 50000);
+        }
+
+
+
+
+
+
+    </script>
+</div>
+</body>
+</html>

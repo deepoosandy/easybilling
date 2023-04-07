@@ -14,5 +14,6 @@ public class InvoiceDto {
     private String billingAddress;
     private String billingTotalAmount;
     private int totalItemsInbill;
+    private String gstAmount;
     private List<AddToBill> itemsForbill;
 }

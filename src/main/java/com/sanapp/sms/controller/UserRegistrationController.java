@@ -2,8 +2,10 @@ package com.sanapp.sms.controller;
 
 import com.sanapp.sms.dto.UserDto;
 import com.sanapp.sms.services.IUserService;
+import com.sanapp.sms.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,7 @@ import java.util.Locale;
 public class UserRegistrationController {
 
     @Autowired
-    private IUserService iUserService;
+    private UserServiceImpl iUserService;
 
     @Autowired
     private MessageSource messageSource;

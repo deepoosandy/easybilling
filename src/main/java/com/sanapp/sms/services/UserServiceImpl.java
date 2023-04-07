@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl implements UserDetailsManager {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -27,13 +28,13 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Override
+   // @Override
     @Transactional
     public UserDto findByUsername(String username) {
         return ItemDetailsMapper.domainToDto(userRepository.findByUserName(username));
     }
 
-    @Override
+   // @Override
     @Transactional
     public UserDto save(UserDto userDto) {
         userDto.setRole("ROLE_USER");
@@ -61,5 +62,30 @@ public class UserServiceImpl implements IUserService {
         roles.add(role);
         return roles.stream().map(r -> new SimpleGrantedAuthority(r))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createUser(UserDetails user) {
+
+    }
+
+    @Override
+    public void updateUser(UserDetails user) {
+
+    }
+
+    @Override
+    public void deleteUser(String username) {
+
+    }
+
+    @Override
+    public void changePassword(String oldPassword, String newPassword) {
+
+    }
+
+    @Override
+    public boolean userExists(String username) {
+        return false;
     }
 }

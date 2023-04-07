@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<style>
+
+.next {
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+  float: right;
+  margin: 50px;
+}
+
+a {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+}
+
+a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+td {
+    vertical-align: bottom;
+}
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+input[type=text], select {
+
+  padding: 12px 20px;
+  margin: 8px 0;
+
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+
+
+</style>
+
+
+<head>
+    <title>Add Expense</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+
+    <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
+    <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
+    <link th:href="@{/main.css}" rel="stylesheet"/>
+
+</head>
+<body>
+<div th:replace="fragments/other-header :: other-header"/>
+
+<div class="container">
+    <div>
+        <form th:action="@{/addToExpense}" id="billingForm" th:object="${expenseDto}" method="POST">
+
+            <label for="expenseDescription" style="margin-right:5px">Expense Description:</label>
+            <textarea type="text" class="form-control text-green-600" id="expenseDescription"
+                      th:field="*{expenseDescription}" style="font-size:15px; "/>
+            <div class="form-inline">
+                <div class="form-group ">
+                    <label for="itemRate" style=" margin-right:5px">Item Rate:</label>
+                    <input type="text" class="form-control" style="margin-left:50px" id="itemRate"
+                           th:field="*{itemRate}" placeholder="Enter item rate!" onchange="addItemPrice(this)"/>
+                </div>
+                <div class="form-group  " style="margin-left:83px">
+                    <label for="expenseDate" style="margin-right:5px">Expense Date:</label>
+                    <input type="datetime-local" class="form-control text-green-600" id="expenseDate"
+                           th:field="*{expenseDate}" style="font-size:15px; "/>
+                </div>
+            </div>
+            <div class="form-inline">
+                <div class="form-group ">
+                    <label for="expenseAmount" style=" margin-right:5px">Expense Amount:</label>
+                    <input type="text" class="form-control text-green-600" id="expenseAmount"
+                           th:field="*{expenseAmount}" style="font-size:15px; "/>
+                </div>
+                <div class="form-group " style="margin-left:47px">
+                    <label for="unpaidAmount" style="margin-right:5px">Unpaid Amount:</label>
+                    <input type="text" class="form-control text-green-600" id="unpaidAmount" th:field="*{unpaidAmount}"
+                           style="font-size:15px; "/>
+                </div>
+            </div>
+
+            <button class="btn btn-default btn-sm" style="outline: none; box-shadow: none; color:#5cb85c;"
+                    id="addToExpense" type="submit"
+                    onclick="return validateExpenseForm();">
+                <span class="glyphicon glyphicon-plus"></span> Add Expense
+            </button>
+
+        </form>
+        <div th:unless="${#lists.isEmpty(addedInExpenseList)}">
+        <a href="#"  class="btn btn-primary" th:href="@{/saveExpense}"  style="position: absolute;left: 79%;top:81%">Save Expense</a>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div th:unless="${#lists.isEmpty(addedInExpenseList)}">
+        <h2>Expense</h2>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Expense Description</th>
+                <th>Item Rate</th>
+                <th>Expense Date</th>
+                <th>Total Amount</th>
+                <th>Unpaid Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="expenseDetails : ${addedInExpenseList}">
+                <td><span th:text="${expenseDetails.rowNum}"> Title </span></td>
+                <td><span th:text="${expenseDetails.expenseDescription}"> Title </span></td>
+                <td><span th:text="${expenseDetails.itemRate}"> Author </span></td>
+                <td><span th:text="${expenseDetails.expenseDate}"> Title </span></td>
+                <td><span th:text="${expenseDetails.expenseAmount}"> Author </span></td>
+                <td><span th:text="${expenseDetails.unpaidAmount}"> Title </span></td>
+                <td><a href="#" th:href="@{/deleteFromExpenseList(rowId=${expenseDetails.rowNum})}">
+                    <span class="glyphicon glyphicon-trash" style="text-align:center; font-size:20px;color:red;"></span>
+                </a></td>
+            </tr>
+
+
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
+
+
+<script>
+
+function validateExpenseForm(){
+
+var expenseDescription=  document.getElementById('expenseDescription').value
+var itemRate=  document.getElementById('itemRate').value
+var expenseDate=  document.getElementById('expenseDate').value
+var expenseAmount=  document.getElementById('expenseAmount').value
+var unpaidAmount=  document.getElementById('unpaidAmount').value
+
+if(expenseDescription===''){
+alert("Please fill expense description!");
+return false;
+}
+if(itemRate===''){
+alert("Please fill item rate!");
+return false;
+}
+
+if(expenseDate===''){
+alert("Please select expense date!");
+return false;
+}
+
+if(expenseAmount===''){
+alert("Please fill expense Amount!");
+return false;
+}
+if(unpaidAmount===''){
+alert("Please fill unpaid Amount!");
+return false;
+}
+
+
+ return true;
+}
+
+function addItemPrice(inputValue){
+var itemUnitPrice= document.getElementById('itemPrice').value;
+var output =itemUnitPrice.split("/");
+
+var total= inputValue.value * (output[0]).trim();
+document.getElementById('itemSum').value=total;
+//billingId
+
+}
+function validateAddedList(){
+
+}
+
+function unitPrice(inputValue){
+
+ $.ajax({
+        type : "GET",
+        url: "/billing/item/?itemCode="+inputValue.value,
+        success: function(result){
+                       var code=result.itemUnitPrice.measurementUnit;
+                       var itemCode=result.itemCode;
+                       var unitPrice= result.itemUnitPrice.itemUnitPrice;
+                       $.ajax({
+                        type : "GET",
+                        url: "/measurement/id/?code="+code,
+                        success: function(result1 ){
+                         $('#itemPrice').val( unitPrice+ ' / ' +result1);
+                         $('#itemPriceHidden').val(itemCode);
+
+                         }
+
+                                });
+
+        }
+
+   });
+
+}
+
+    $("#itemlist1").select2({
+        theme: "bootstrap4",
+        ajax: {
+            url: '/listitems',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (response) {
+                return {
+                    results: response
+                };
+            },
+            cache: true
+        }
+    });
+
+
+
+
+
+</script>
+
+</body>
+</html>

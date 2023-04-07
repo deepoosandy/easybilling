@@ -102,8 +102,11 @@ public class ItemDetailsMapper {
                 totalBillAmount += billItem.getItemQuantity() * billItem.getItemUnitPrice();
             }
         }
+        double gstAmount= (double)((totalBillAmount * 18) /100);
+        invoiceDto.setGstAmount(String.format("%,.2f", gstAmount));
         invoiceDto.setItemsForbill(addToBillList);
         invoiceDto.setTotalItemsInbill(totalItemsInBill);
+        totalBillAmount=totalBillAmount+gstAmount;
         invoiceDto.setBillingTotalAmount(String.format("%,.2f", totalBillAmount));
         invoiceDto.setBillingDate(DateUtility.todaysDate());
     }
