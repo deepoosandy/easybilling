@@ -45,7 +45,7 @@ input[type=text], select {
 
 
 <head>
-  <title>Add MistriPayment Details</title>
+  <title>Add Cement Details</title>
   <link rel="stylesheet" type="text/css"
         href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
 
@@ -64,58 +64,56 @@ input[type=text], select {
     </a>
   </div>
   <div style="text-align: center;">
-    <i><u><h2>Mistry Entry</h2></u></i>
+    <i><u><h2>Cement Entry</h2></u></i>
   </div>
   <div>
-    <form th:action="@{/addToMistriPaymentDetails}" id="mistriForm" th:object="${mistriPaymentDto}" method="POST">
-
-      <label for="paymentDescription" style="margin-right:5px">Payment Description:</label>
-      <textarea type="text" class="form-control text-green-600" id="paymentDescription"
-                th:field="*{paymentDescription}" style="font-size:15px; "/>
+    <form th:action="@{/addToCementDetails}" id="cementForm" th:object="${cementDto}" method="POST">
       <div class="form-inline">
         <div class="form-group ">
-          <label for="paymentAmount" style=" margin-right:5px">Payment Amount:</label>
-          <input type="text" class="form-control" style="margin-left:50px" id="paymentAmount"
-                 th:field="*{paymentAmount}" placeholder="Enter item rate!" onchange="addItemPrice(this)"/>
-        </div>
-        <div class="form-group  " style="margin-left:83px">
-          <label for="paymentDate" style="margin-right:5px">Payment Date:</label>
-          <input type="date" class="form-control text-green-600" id="paymentDate"
-                 th:field="*{paymentDate}" style="font-size:15px; "/>
+          <label for="quantity" style="margin-right:5px">Quantity:</label>
+          <input type="text" class="form-control" style="margin-left:10px" id="quantity"
+                 th:field="*{numberOfBora}" placeholder="Enter quantity!" onchange="addItemPrice(this)"/>
+          <label for="rate" style=" margin-right:5px">Rate(Per Packet):</label>
+          <input type="text" class="form-control" style="margin-left:10px" id="rate"
+                 th:field="*{ratePerBora}" placeholder="Enter item rate!" onchange="addItemPrice(this)"/>
+
+          <label for="purchaseDate" style="margin-right:5px">Purchase Date:</label>
+          <input type="date" class="form-control text-green-600" id="purchaseDate"
+                 th:field="*{purchaseDate}" style="font-size:15px; "/>
         </div>
       </div>
       <button class="btn btn-default btn-sm" style="outline: none; box-shadow: none; color:#5cb85c;"
-              id="addToPayment" type="submit"
-              onclick="return validateMistriPaymentForm();">
-        <span class="glyphicon glyphicon-plus"></span> Add Payment
+              id="addToInventory" type="submit"
+              onclick="return validateCementForm();">
+        <span class="glyphicon glyphicon-plus"></span> Add To inventory
       </button>
 
     </form>
-    <div th:unless="${#lists.isEmpty(addedInMistriPaymentList)}">
-      <a href="#"  class="btn btn-primary" th:href="@{/saveMistriPayment}"  style="position: absolute;left: 79%;top:81%">Save Mistri payment Details</a>
+    <div th:unless="${#lists.isEmpty(addToCementDetailList)}">
+      <a href="#"  class="btn btn-primary" th:href="@{/saveCementDetails}"  style="position: absolute;left: 79%;top:81%">Save Cement Inventory</a>
     </div>
   </div>
   <br>
   <br>
   <br>
-  <div th:unless="${#lists.isEmpty(addedInMistriPaymentList)}">
-    <h2>Payment Details</h2>
+  <div th:unless="${#lists.isEmpty(addToCementDetailList)}">
+    <h2>Cement Details</h2>
     <table class="table table-striped">
       <thead>
       <tr>
         <th>#</th>
-        <th>Payment Description</th>
-        <th>Payment Amount</th>
-        <th>Payment Date</th>
+        <th>Quantity</th>
+        <th>Rate(Per Packet)</th>
+        <th>Purchase Date</th>
       </tr>
       </thead>
       <tbody>
-      <tr th:each="mistripaumentDetails : ${addedInMistriPaymentList}">
-        <td><span th:text="${mistripaumentDetails.rowNum}"> Title </span></td>
-        <td><span th:text="${mistripaumentDetails.paymentDescription}"> Title </span></td>
-        <td><span th:text="${mistripaumentDetails.paymentAmount}"> Author </span></td>
-        <td><span th:text="${mistripaumentDetails.paymentDate}"> Title </span></td>
-        <td><a href="#" th:href="@{/deleteFromMistriPaymentList(rowId=${mistripaumentDetails.rowNum})}">
+      <tr th:each="cementDetails : ${addToCementDetailList}">
+        <td><span th:text="${cementDetails.rowNum}">Title </span></td>
+        <td><span th:text="${cementDetails.numberOfBora}"> Title </span></td>
+        <td><span th:text="${cementDetails.ratePerBora}"> Author </span></td>
+        <td><span th:text="${cementDetails.purchaseDate}"> Title </span></td>
+        <td><a href="#" th:href="@{/deleteFromCementList(rowId=${cementDetails.rowNum})}">
           <span class="glyphicon glyphicon-trash" style="text-align:center; font-size:20px;color:red;"></span>
         </a></td>
       </tr>
@@ -135,23 +133,23 @@ input[type=text], select {
 
 <script>
 
-function validateMistriPaymentForm(){
+function validateCementForm(){
 
-var paymentDescription=  document.getElementById('paymentDescription').value
-var paymentAmount=  document.getElementById('paymentAmount').value
-var paymentDate=  document.getElementById('paymentDate').value
+var quantity=  document.getElementById('quantity').value
+var rate=  document.getElementById('rate').value
+var purchaseDate=  document.getElementById('purchaseDate').value
 
-if(paymentDescription===''){
-alert("Please fill Payment description!");
+if(quantity===''){
+alert("Please fill item quantity!");
 return false;
 }
-if(paymentAmount===''){
-alert("Please fill payment amount!");
+if(rate===''){
+alert("Please fill item rate!");
 return false;
 }
 
-if(paymentDate===''){
-alert("Please select payment date!");
+if(purchaseDate===''){
+alert("Please select purchaseDate date!");
 return false;
 }
  return true;

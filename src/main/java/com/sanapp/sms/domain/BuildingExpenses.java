@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +26,7 @@ public class BuildingExpenses implements Serializable {
     private String expenseDescription;
 
     @Column(name="expense_date")
-    private LocalDateTime expenseDate;
+    private LocalDate expenseDate;
 
     @Column(name="expense_amount")
     private Double expenseAmount;

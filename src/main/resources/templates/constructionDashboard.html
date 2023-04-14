@@ -9,6 +9,9 @@ background-color: #f2f2f2;
 padding: 20px;
 }
 
+
+
+
 </style>
 <head>
     <title>Construction Dashboard</title>
@@ -17,53 +20,75 @@ padding: 20px;
     <link th:rel="stylesheet" th:href="@{webjars/select2/4.0.13/css/select2.css}"/>
     <link th:rel="stylesheet" th:href="@{webjars/select2-bootstrap4-theme/1.0.0/dist/select2-bootstrap4.css}"/>
     <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
-    <script th:src="@{/webjars/popper.js/1.12.9-1/popper.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <script th:src="@{webjars/select2/4.0.13/js/select2.full.js}"></script>
     <link href="/main.css" rel="stylesheet"/>
-    <script th:src="@{webjars/jspdf/1.4.1/dist/jspdf.min.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="/js/ExpenseChart.js" type="text/javascript"></script>
+    <script src="/js/ChartJs.js" type="text/javascript"></script>
+    <script src="/js/DefaultCharts.js" type="text/javascript"></script>
 </head>
-<body>
+<body onload="return defaultChart();">
 <div th:replace="/fragments/other-header :: other-header"/>
 
 <div class="container">
+
     <i><u><h2>Construction Dashboard</h2></u></i>
     <div class="row">
         <div class="col-lg-8 mt-5" style="top: 20px;">
             <table class="table table-bordered table-hover table-responsive">
-        <thead >
+                <thead>
                 <tr bgcolor="#337ab7">
                     <th style="padding-left: 30px;"><i>Category</i></th>
                     <th style="padding-left: 30px;"><i>Amount(Rs.)</i></th>
                     <th style="padding-left: 30px;"><i>Add New Entry</i></th>
                     <th style="padding-left: 30px;"><i>Go To Reporting</i></th>
                 </tr>
-        </thead>
+                </thead>
                 <tbody>
                 <tr class="info">
                     <td style="padding-left: 30px;"><i>Other Expense Amount</i></td>
-                    <td style="padding-left: 30px;"><span id="expenseId" th:text="${dashboardData.otherExpenseTotal}"></span></td>
-                    <td style="padding-left: 60px;"><a href="#" th:href="@{/addToExpenseForm}"><img src="\images\newEntry.png" title="Add new expense entry" width="20" height="20"/></a></td>
-                    <td style="padding-left: 60px;"><a href="#" th:href="@{/openOtherExpenseTable}"><img src="\images\detailReports.png" title="Go to expense Reporting" width="20" height="20"/></a></td>
+                    <td style="padding-left: 30px;"><span id="expenseId"
+                                                          th:text="${dashboardData.otherExpenseTotal}"></span></td>
+                    <td style="padding-left: 60px;">
+                        <a href="#" th:href="@{/addToExpenseForm}"><img src="\images\newEntry.png"
+                                                                        title="Add new expense entry" width="20"
+                                                                        height="20"/>
+                        </a></td>
+                    <td style="padding-left: 60px;"><a href="#" th:href="@{/openOtherExpenseTable}">
+                        <img src="\images\detailReports.png" title="Go to expense Reporting" width="20"
+                             height="20"/></a></td>
                 </tr>
                 <tr class="success">
                     <td style="padding-left: 30px;"><i>Mistri Expense</i></td>
-                    <td style="padding-left: 30px;"><span id="mistriExpenseId" th:text="${dashboardData.mistriExpenseTotal}"></span></td>
-                    <td style="padding-left: 60px;"><a href="#" th:href="@{/addToMistriForm}"><img src="\images\newEntry.png" title="Add Mistri Payment" width="20" height="20"/></a></td>
-                    <td style="padding-left: 60px;"><a href="#" th:href="@{/openMistriPaymentDetailsTable}"><img src="\images\detailReports.png" title="Go to Mistri reporting" width="20" height="20"/></a></td>
+                    <td style="padding-left: 30px;"><span id="mistriExpenseId"
+                                                          th:text="${dashboardData.mistriExpenseTotal}"></span></td>
+                    <td style="padding-left: 60px;">
+                        <a href="#" th:href="@{/addToMistriForm}"><img src="\images\newEntry.png"
+                                                                       title="Add Mistri Payment" width="20"
+                                                                       height="20"/></a></td>
+                    <td style="padding-left: 60px;"><a href="#" th:href="@{/openMistriPaymentDetailsTable}"><img
+                            src="\images\detailReports.png" title="Go to Mistri reporting" width="20" height="20"/></a>
+                    </td>
                 </tr>
                 <tr class="info">
                     <td style="padding-left: 30px;"><i>Cement Expense</i></td>
-                    <td style="padding-left: 30px;"><span id="cementExpenseId" th:text="${dashboardData.cementExpenseTotal}"></span></td>
-                    <td style="padding-left: 60px;"><a href="#" th:href="@{/openOtherExpenseTable}"><img src="\images\newEntry.png" title="Add cement entry" width="20" height="20"/></a></td>
-                    <td style="padding-left: 60px;"><a href="#" th:href="@{/dashboard}"><img src="\images\detailReports.png" title="Go to cement Reporting" width="20" height="20"/></a></td>
+                    <td style="padding-left: 30px;"><span id="cementExpenseId"
+                                                          th:text="${dashboardData.cementExpenseTotal}"></span></td>
+                    <td style="padding-left: 60px;">
+                        <a href="#" th:href="@{/addToCementForm}"><img src="\images\newEntry.png"
+                                                                       title="Add cement entry" width="20" height="20"/>
+                        </a></td>
+                    <td style="padding-left: 60px;"><a href="#" th:href="@{/openCementDetailsTable}"><img
+                            src="\images\detailReports.png" title="Go to cement Reporting" width="20" height="20"/></a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
             <hr width="100%" size="20" align="right" color="blue" noshade style=" border-top: 1px solid green">
             <div class="form-group row">
                 <label for="TotalExpenseId" class="control-label col-sm-4"><i>Total Expense:</i></label>
-                <div class="col-sm-1" >
+                <div class="col-sm-1">
                     <span id="TotalExpenseId" th:text="${dashboardData.sumOfAllExpense}"></span>
                 </div>
 
@@ -77,7 +102,62 @@ padding: 20px;
 
 </div>
 </div>
-<footer th:replace="layout/layout :: footer"></footer>
 
+<div style="text-align:center;">
+<label for="year">Select Graph for year:</label>
+<select id="year" onchange="yearWiseGraph(this)">
+    <option value="2022">2022</option>
+    <option value="2023">2023</option>
+    <option value="2024">2024</option>
+    <option value="2025">2025</option>
+</select>
+
+<label for="graphType">Select Graph Type:</label>
+<select id="graphType" onchange="chartWiseGraph(this, document.getElementById('year').value)">
+    <option value="bar">Bar</option>
+    <option value="pie">Pie</option>
+</select>
+</div>
+<!--Start of Graph Section-->
+<div class="row">
+    <div  style="top: 20px;">
+        <table class="table table-bordered table-hover table-responsive">
+
+            <tbody>
+            <tr class="info">
+                <td >
+                    <canvas id="expenseChart" style="width:100%;max-width:600px"></canvas>
+                </td>
+                <td >
+                    <canvas id="mistriChart" style="width:100%;max-width:600px"></canvas>
+                    </span></td>
+
+            </tr>
+            <tr class="success">
+                <td >
+                    <canvas id="cementChart" style="width:100%;max-width:600px"></canvas>
+                </td>
+                <td ><canvas id="totalExpenseChart" style="width:100%;max-width:600px"></canvas></td>
+
+            </tr>
+
+            </tbody>
+        </table>
+        <hr width="100%" size="20" align="right" color="blue" noshade style=" border-top: 1px solid green">
+    </div>
+</div>
+<!--End of Graph Section-->
+<div>
+    <div>
+
+    </div>
+    <div>
+
+    </div>
+</div>
+<div>
+
+</div>
+<footer th:replace="layout/layout :: footer"></footer>
 </body>
 </html>

@@ -1,14 +1,17 @@
 package com.sanapp.sms.utils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateUtility {
     //dd-MM-yyyy HH:mm:ss
-    private final static String dateFormat = "dd-MM-yyyy HH:mm:ss";
+    private final static String DATETIMEFORMAT = "dd-MM-yyyy HH:mm:ss";
     public final static String GETDATEFORMAT = "yyyy-MM-dd'T'HH:mm";
+    public final static String DATEFORMAT="yyyy-MM-dd";//2023-04-07
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATETIMEFORMAT);
+    private static DateTimeFormatter dateformatter = DateTimeFormatter.ofPattern(DATEFORMAT);
 
     public static LocalDateTime todaysDate() {
 
@@ -39,6 +42,15 @@ public class DateUtility {
     public static String localDateTimeToString(LocalDateTime dateTime) {
         DateTimeFormatter formatter = getDateFormatter();
         return dateTime.format(formatter);
+
+    }
+    public static String localDateToString(LocalDate dateTime) {
+        return dateTime.format(dateformatter);
+
+    }
+
+    public static LocalDate stringToLocaldate(String dateTime) {
+        return LocalDate.parse(dateTime,dateformatter);
 
     }
 }

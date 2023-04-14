@@ -7,6 +7,10 @@ background-color: #f2f2f2;
 padding: 20px;
 }
 
+
+
+
+
 </style>
 <head>
     <meta charset="UTF-8">
@@ -21,31 +25,43 @@ padding: 20px;
 </head>
 <body>
 <div th:replace="fragments/other-header :: other-header"/>
-<div id="print-content" >
-    <a href="#"  class="btn btn-primary" th:href="@{/mistriReport}"  style="position: absolute;left: 79%;top:15%">Download Expense Report</a>
-</div>
 <div class="container">
 
 
     <div style="margin-bottom:20px; padding:10px; background-color:#337ab7; color:white;">
-        <p>Type some text to search the table for <strong>Expense Description</strong>, <strong>Expense Date</strong>, <strong>Item Rate</strong>,
-            <strong>Expense Amount</strong>, <Strong>Unpaid Amount</Strong>:</p>
+        <p>Type some text to search the table for <strong>Expense Description</strong>, <strong>Expense Date</strong>,
+            <strong>Item Rate</strong>,
+            <strong>Expense Amount</strong>, <Strong>Unpaid Amount</Strong>:
+        <div style="text-align: right;">
+            <a href="#" th:href="@{/backdashborad}">
+                <strong style="color:white;"><< Back</strong>
+            </a>
+            <a href="#" th:href="@{/addToExpenseForm}">
+                <img src="\images\newEntry.png" title="Add new expense entry" width="20" height="20"/>
+            </a>
+            <a href="#" th:href="@{/expenseReport}">
+                <img src="\images\downloadPdf.png" title="Download this Report As Pdf" width="20" height="20"/>
+            </a>
+        </div>
+
+        </p>
         <input class="form-control" id="invoiceFilter" type="text" placeholder="Search.."/>
     </div>
     <div id="printIt">
-    <table id="expenseTable" class="table table-bordered table-hover table-responsive">
-        <thead>
-        <tr>
-            <th>Expense Description</th>
-            <th>Expense Date</th>
-            <th>Item Rate</th>
-            <th>Expense Amount</th>
-            <th>Unpaid Amount</th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+        <table id="expenseTable" class="table table-bordered table-hover table-responsive">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Expense Description</th>
+                <th>Item Rate</th>
+                <th>Expense Date</th>
+                <th>Expense Amount(Rs)</th>
+                <th>Unpaid Amount</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 
     <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
@@ -63,6 +79,7 @@ $(document).ready(function() {
 		success: function(result){
 			$.each(result, function(i, listBuildingOtherExpense){
 				var customerRow = '<tr>' +
+				                    '<td><a href=\'#\'>' +i + '</a></td>' +
 									'<td><a href=\'#\'>' + listBuildingOtherExpense.expenseDescription + '</a></td>' +
 									'<td>' + listBuildingOtherExpense.itemRate + '</td>' +
 									'<td>' + listBuildingOtherExpense.expenseDate + '</td>' +
@@ -120,6 +137,10 @@ function printDiv() {
 				a.close();
 			}, 50000);
         }
+
+
+
+
 
 
 

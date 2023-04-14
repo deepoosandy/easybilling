@@ -10,10 +10,13 @@ padding: 20px;
 
 
 
+
+
+
 </style>
 <head>
     <meta charset="UTF-8">
-    <title>Mistri Payment Details</title>
+    <title>Cement Details</title>
     <link rel="stylesheet" type="text/css"
           href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
 
@@ -26,24 +29,23 @@ padding: 20px;
 <div th:replace="fragments/other-header :: other-header"/>
 
 <div class="container">
-
-
     <div style="margin-bottom:20px; padding:10px; background-color:#337ab7; color:white;">
-        <p>Type some text to search the table for <strong>Payment Description</strong>, <strong>Payment Date</strong>,
-            <strong>Payment Amount</strong>:
+        <p>Type some text to search the table for <strong>Purchase Date</strong>, <strong>Item unit rate</strong>,
+            <strong>Quantity</strong>,
+            <strong>Amount</strong> :
         <div style="text-align: right;">
             <a href="#" th:href="@{/backdashborad}">
                 <strong style="color:white;"><< Back</strong>
             </a>
-            <a href="#" th:href="@{/addToMistriForm}">
-                <img src="\images\newEntry.png" title="Add Mistri Payment" width="20" height="20"/>
+            <a href="#" th:href="@{/addToCementForm}">
+                <img src="\images\newEntry.png" title="Add cement entry" width="20" height="20"/>
             </a>
-            <a href="#" th:href="@{/mistriReport}">
+            <a href="#" th:href="@{/cementReport}">
                 <img src="\images\downloadPdf.png" title="Download this Report As Pdf" width="20" height="20"/>
             </a>
         </div>
-
         </p>
+
         <input class="form-control" id="invoiceFilter" type="text" placeholder="Search.."/>
     </div>
     <div id="printIt">
@@ -51,9 +53,10 @@ padding: 20px;
             <thead>
             <tr>
                 <th>#</th>
-                <th>Payment Description</th>
-                <th>Payment Date</th>
-                <th>Payment Amount(Rs)</th>
+                <th>Purchase Date</th>
+                <th>Quantity</th>
+                <th>Unit Price(Rs)</th>
+                <th>Amount(Rs)</th>
             </tr>
             </thead>
             <tbody>
@@ -72,14 +75,16 @@ $(document).ready(function() {
 	// DO GET
 	$.ajax({
 		type : "GET",
-		url : "/listMistriPaymentDetails",
+		url : "/listCementDetails",
 		success: function(result){
-			$.each(result, function(i, listMistriPaymentDetails){
+
+			$.each(result, function(i, listCementDetails){
 				var customerRow = '<tr>' +
 				                    '<td>' + i + '</td>' +
-									'<td><a href=\'#\'>' + listMistriPaymentDetails.paymentDescription + '</a></td>' +
-									'<td>' + listMistriPaymentDetails.paymentDate + '</td>' +
-									'<td>' + listMistriPaymentDetails.paymentAmount + '</td>' +
+									'<td><a href=\'#\'>' + listCementDetails.purchaseDate + '</a></td>' +
+									'<td>' + listCementDetails.cementQuantity + '</td>' +
+									'<td>' + listCementDetails.itemUnitRate + '</td>' +
+									'<td>' + listCementDetails.amount + '</td>' +
 								  '</tr>';
 
 				$('#expenseTable tbody').append(customerRow);
@@ -131,6 +136,9 @@ function printDiv() {
 				a.close();
 			}, 50000);
         }
+
+
+
 
 
 

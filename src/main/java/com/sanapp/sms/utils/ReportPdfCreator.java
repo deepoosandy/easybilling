@@ -154,13 +154,14 @@ public class ReportPdfCreator {
     }
 
     private static void populateExpendeData(PdfPTable table, List<BuildingExpenseDTO> buildingExpenseDTOList) {
-
+        int count=0;
         for (BuildingExpenseDTO expenseDto : buildingExpenseDTOList) {
-
+            count++;
             table.setWidthPercentage(100);
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
 
+            table.addCell(String.valueOf(count));
             table.addCell(expenseDto.getExpenseDescription());
             table.addCell(expenseDto.getExpenseDate());
             table.addCell(expenseDto.getItemRate());
