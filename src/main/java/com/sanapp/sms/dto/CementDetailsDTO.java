@@ -8,11 +8,12 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
 public class CementDetailsDTO {
-    private int numberOfBora;
-    private LocalDateTime purchaseDate;
+    private int rowNum;
+    private Integer numberOfBora;
+    private String purchaseDate;
     private String paymentStatus;
-    private int ratePerBora;
-    private LocalDateTime paymentDate;
+    private Double ratePerBora;
+    private String paymentDate;
+    public CementDetailsDTO(){}
 }

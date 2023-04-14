@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,7 +19,7 @@ public class MistriPaymentDetails implements Serializable {
     private long paymentId;
 
     @Column(name="payment_date")
-    private LocalDateTime paymentDate;
+    private LocalDate paymentDate;
 
     @Column(name="payment_amount")
     private double paidAmount;

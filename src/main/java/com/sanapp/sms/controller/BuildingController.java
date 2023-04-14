@@ -1,7 +1,9 @@
 package com.sanapp.sms.controller;
 
 import com.itextpdf.text.DocumentException;
+import com.sanapp.sms.domain.CementDetailsReportData;
 import com.sanapp.sms.dto.BuildingExpenseDTO;
+import com.sanapp.sms.dto.CementDetailsDTO;
 import com.sanapp.sms.dto.MistriDetailsExpenseDTO;
 import com.sanapp.sms.services.IBuildingService;
 import com.sanapp.sms.utils.SMSConstants;
@@ -29,10 +31,14 @@ public class BuildingController {
 
     private List<MistriDetailsExpenseDTO> addToMistriPaymentDetailsList= new ArrayList<>();
 
+
+    private List<CementDetailsDTO> addToCementDetailList= new ArrayList<>();
+
     private int expenseListRowNumber;
     private int addToMistriPaymentDetailRowNumber;
+    private int addToCementRowNumber;
 
-    @GetMapping(value = {"/dashboard"})
+    @GetMapping(value = {"/dashboard","/backdashborad"})
     public String buildingDashboard(Model model) {
 
         model.addAttribute("dashboardData", iBuildingService.populateDashboardDetails());
@@ -82,7 +88,7 @@ public class BuildingController {
     public String deleteFromExpenseList(@RequestParam("rowId") int rowNumber, Model model) {
 
         addToExpenseList.removeIf(x -> x.getRowNum() == rowNumber);
-
+        expenseListRowNumber=0;
         //Again creating row number
         int recount = 0;
         for (BuildingExpenseDTO item : addToExpenseList) {
@@ -160,7 +166,7 @@ public class BuildingController {
     public String deleteFromMistriPaymentList(@RequestParam("rowId") int rowNumber, Model model) {
 
         addToMistriPaymentDetailsList.removeIf(x -> x.getRowNum() == rowNumber);
-
+        addToMistriPaymentDetailRowNumber=0;
         //Again creating row number
         int recount = 0;
         for (MistriDetailsExpenseDTO dto : addToMistriPaymentDetailsList) {
@@ -196,6 +202,76 @@ public class BuildingController {
 
 
     /*Start of Cement section*/
+    @GetMapping(value = {"/addToCementForm"})
+    public String openCementForm(Model model) {
+        model.addAttribute("cementDto", new CementDetailsDTO());
+        return "addCementDetails";
+    }
 
-    /*End of Mistri section*/
+    @PostMapping("/addToCementDetails")
+    public String addToCementDetails(@ModelAttribute(SMSConstants.ADD_CEMENT_DETAILS) CementDetailsDTO cementDto, Model model) {
+
+        if (addToCementDetailList == null) {
+            addToCementDetailList = new ArrayList<>();
+        }
+        addToCementRowNumber++;
+        cementDto.setRowNum(addToCementRowNumber);
+        addToCementDetailList.add(cementDto);
+        model.addAttribute("cementDto", new CementDetailsDTO());
+        model.addAttribute("addToCementDetailList", addToCementDetailList);
+        return "addCementDetails";
+
+    }
+
+    @GetMapping("/saveCementDetails")
+    public String saveCementDetails(Model model) {
+
+        if (addToCementDetailList != null) {
+            addToCementDetailList.stream().forEach(cementDetailsDTO -> {
+                iBuildingService.saveCementDetails(cementDetailsDTO);
+            });
+            addToCementDetailList.clear();
+            addToCementRowNumber=0;
+        }
+        model.addAttribute("cementDto", new CementDetailsDTO());
+        return "addCementDetails";
+
+    }
+
+    @GetMapping("/deleteFromCementList")
+    public String deleteCementDetailsFromCementList(@RequestParam("rowId") int rowNumber, Model model) {
+
+        addToCementDetailList.removeIf(x -> x.getRowNum() == rowNumber);
+        addToCementRowNumber=0;
+        //Again creating row number
+        int recount = 0;
+        for (CementDetailsDTO dto : addToCementDetailList) {
+            recount++;
+            dto.setRowNum(recount);
+        }
+
+        model.addAttribute("cementDto", new CementDetailsDTO());
+        model.addAttribute("addToCementDetailList", addToCementDetailList);
+
+        return "addCementDetails";
+    }
+
+    @GetMapping("/listCementDetails")
+    @ResponseBody
+    public List<CementDetailsReportData> listCementDetails() {
+        return iBuildingService.listCementDetailsDTO();
+    }
+
+    @GetMapping(value = {"/openCementDetailsTable"})
+    public String openCementDetailsList() {
+        return "listCementDetails";
+    }
+
+    @GetMapping(value = "/cementReport", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public void generateCementReportPDF(HttpServletResponse response) throws IOException, DocumentException {
+        iBuildingService.cementReportPdf(response);
+    }
+
+
+    /*End of Cement section*/
 }

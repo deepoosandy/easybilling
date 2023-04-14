@@ -5,6 +5,7 @@ import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.sanapp.sms.domain.CementDetailsReportData;
 import com.sanapp.sms.dto.BuildingExpenseDTO;
 import com.sanapp.sms.dto.MistriDetailsExpenseDTO;
 
@@ -12,15 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class MistriReportCreator {
+public class CementReportCreator {
 
 
     private static Font COURIER = new Font(Font.FontFamily.COURIER, 20, Font.BOLD);
     private static Font COURIER_SMALL = new Font(Font.FontFamily.COURIER, 16, Font.BOLD);
     private static Font COURIER_SMALL_FOOTER = new Font(Font.FontFamily.COURIER, 12, Font.BOLD);
 
-@Deprecated
+    @Deprecated
     public static void generate(HttpServletResponse response, List<BuildingExpenseDTO> buildingExpenseDTOList,
                                 String logoImgPath, int noOfColumns, Float[] logoImgScale,
                                 String reportFileName, List<String> columnNames) throws DocumentException, IOException {
@@ -88,7 +90,7 @@ public class MistriReportCreator {
     }
 
     public static void generatePdfReport(HttpServletResponse response,
-                                         String logoImgPath, List<MistriDetailsExpenseDTO> listMistriPaymentDetailsDTO, int noOfColumns, Float[] logoImgScale,
+                                         String logoImgPath, List<CementDetailsReportData> listCementDetailsDTO, int noOfColumns, Float[] logoImgScale,
                                          String reportFileName, List<String> columnNames, double total) {
 
         Document document = new Document();
@@ -96,9 +98,10 @@ public class MistriReportCreator {
         try {
             PdfWriter.getInstance(document, response.getOutputStream());
             document.open();
+            int totalQuantity= listCementDetailsDTO.stream().mapToInt(CementDetailsReportData::getCementQuantity).sum();
             addLogo(document, logoImgPath, logoImgScale);
-            addDocTitle(document, reportFileName, total);
-            createTable(document, noOfColumns, listMistriPaymentDetailsDTO, columnNames);
+            addDocTitle(document, reportFileName, total,totalQuantity);
+            createTable(document, noOfColumns, listCementDetailsDTO, columnNames);
             addFooter(document, reportFileName);
             document.close();
 
@@ -121,7 +124,7 @@ public class MistriReportCreator {
         }
     }
 
-    private static void addDocTitle(Document document, String reportFileName, double total) throws DocumentException {
+    private static void addDocTitle(Document document, String reportFileName, double total, double totalQuantity) throws DocumentException {
         String localDateString = LocalDateTime.now().format(DateUtility.getDateFormatter());
         Paragraph p1 = new Paragraph();
         leaveEmptyLine(p1, 1);
@@ -129,13 +132,14 @@ public class MistriReportCreator {
         p1.setAlignment(Element.ALIGN_CENTER);
         leaveEmptyLine(p1, 1);
         p1.add(new Paragraph("Report generated on " + localDateString, COURIER_SMALL));
-        p1.add(new Paragraph("Report Total Expense: " + total, COURIER_SMALL));
+        p1.add(new Paragraph("Total Expense on cement: " + total, COURIER_SMALL));
+        p1.add(new Paragraph("Total Quantity: " + totalQuantity, COURIER_SMALL));
 
         document.add(p1);
 
     }
 
-    private static void createTable(Document document, int noOfColumns, List<MistriDetailsExpenseDTO> listMistriPaymentDetailsDTO, List<String> columnNames) throws DocumentException {
+    private static void createTable(Document document, int noOfColumns, List<CementDetailsReportData> listCementDetailsDTO, List<String> columnNames) throws DocumentException {
         Paragraph paragraph = new Paragraph();
         leaveEmptyLine(paragraph, 3);
         document.add(paragraph);
@@ -150,22 +154,23 @@ public class MistriReportCreator {
         }
 
         table.setHeaderRows(1);
-        populateMistriPaymentData(table, listMistriPaymentDetailsDTO);
+        populateMistriPaymentData(table, listCementDetailsDTO);
         document.add(table);
     }
 
-    private static void populateMistriPaymentData(PdfPTable table, List<MistriDetailsExpenseDTO> mistriDetailsExpenseDTOS) {
+    private static void populateMistriPaymentData(PdfPTable table, List<CementDetailsReportData> listCementDetailsDTO) {
         int count=0;
-        for (MistriDetailsExpenseDTO mistriPayment : mistriDetailsExpenseDTOS) {
+        for (CementDetailsReportData cementDetails : listCementDetailsDTO) {
             count++;
             table.setWidthPercentage(100);
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
             table.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
             table.addCell(String.valueOf(count));
-            table.addCell(mistriPayment.getPaymentDescription());
-            table.addCell(mistriPayment.getPaymentDate());
-            table.addCell(String.valueOf(mistriPayment.getPaymentAmount()));
-            
+            table.addCell(cementDetails.getPurchaseDate().toString());
+            table.addCell(String.valueOf(cementDetails.getCementQuantity()));
+            table.addCell(String.valueOf(cementDetails.getItemUnitRate()));
+            table.addCell(String.valueOf(cementDetails.getAmount()));
+
         }
 
     }

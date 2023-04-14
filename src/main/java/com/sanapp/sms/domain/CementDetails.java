@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@NamedQuery(name = "CementPurchaseDetails.findAll", query = "SELECT i FROM CementPurchaseDetails i")
-public class CementPurchaseDetails {
+@NamedQuery(name = "CementDetails.findAll", query = "SELECT i FROM CementDetails i")
+public class CementDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "cement_purchase_id")
@@ -20,7 +21,7 @@ public class CementPurchaseDetails {
     private int numberOfBora;
 
     @Column(name = "date_of_purchase")
-    private LocalDateTime purchaseDate;
+    private LocalDate purchaseDate;
 
     @Column(name = "status")
     private String paymentStatus;
@@ -29,7 +30,7 @@ public class CementPurchaseDetails {
     private int ratePerBora;
 
     @Column(name = "payment_date")
-    private LocalDateTime paymentDate;
+    private LocalDate paymentDate;
 
 
 }
