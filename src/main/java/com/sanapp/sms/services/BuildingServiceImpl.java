@@ -9,6 +9,7 @@ import com.sanapp.sms.dto.BuildingDashboardDTO;
 import com.sanapp.sms.dto.BuildingExpenseDTO;
 import com.sanapp.sms.dto.CementDetailsDTO;
 import com.sanapp.sms.dto.MasonDetailsExpenseDTO;
+
 import com.sanapp.sms.repository.IBuildingOtherExpenseRepository;
 import com.sanapp.sms.repository.ICementDetailsReportDataRepository;
 import com.sanapp.sms.repository.ICementExpenseRepository;
@@ -16,6 +17,7 @@ import com.sanapp.sms.repository.IMistriExpenseReposity;
 import com.sanapp.sms.utils.DateUtility;
 import com.sanapp.sms.utils.CementReportCreator;
 import com.sanapp.sms.utils.MasonReportCreator;
+
 import com.sanapp.sms.utils.ReportPdfCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -131,6 +133,7 @@ public class BuildingServiceImpl implements IBuildingService {
     @Override
     public void generatePdf(HttpServletResponse response) throws DocumentException, IOException {
         enrichHttpResponse(response, "Expense_Report");
+
         Double otherExpense = iBuildingOtherExpenseRepository.sumOfExpense() != null ? iBuildingOtherExpenseRepository.sumOfExpense() : 0;
         ReportPdfCreator.generatePdfReport(response, logoImgPath, listAllBuildingExpenseDTO(), noOfColumns, logoImgScale,
                 reportFileName, columnNames, otherExpense);
@@ -150,6 +153,7 @@ public class BuildingServiceImpl implements IBuildingService {
     }
 
     private MistriPaymentDetails mistriDetailsExpenseDTOTomistriDomain(MasonDetailsExpenseDTO mistriDetailsExpenseDTO) {
+
         MistriPaymentDetails mistriPaymentDetails = new MistriPaymentDetails();
         mistriPaymentDetails.setDescription(mistriDetailsExpenseDTO.getPaymentDescription());
         mistriPaymentDetails.setPaymentDate(DateUtility.stringToLocaldate(mistriDetailsExpenseDTO.getPaymentDate()));
@@ -159,6 +163,7 @@ public class BuildingServiceImpl implements IBuildingService {
 
     private MasonDetailsExpenseDTO mistriDomainToMistriDetailsExpenseDTO(MistriPaymentDetails mistriPaymentDetails) {
         MasonDetailsExpenseDTO mistriDetailsExpenseDTO = new MasonDetailsExpenseDTO();
+
         mistriDetailsExpenseDTO.setPaymentAmount(mistriPaymentDetails.getPaidAmount());
         mistriDetailsExpenseDTO.setPaymentDescription(mistriPaymentDetails.getDescription());
         mistriDetailsExpenseDTO.setPaymentDate(DateUtility.localDateToString(mistriPaymentDetails.getPaymentDate()));
@@ -173,6 +178,7 @@ public class BuildingServiceImpl implements IBuildingService {
 
     @Override
     public List<MasonDetailsExpenseDTO> listMasonPaymentDetailsDTO() {
+
         List<MistriPaymentDetails> buildingExpensesList = iMistriExpenseReposity.findAll();
         return buildingExpensesList.stream().sorted(
                 (b1, b2) -> b2.getPaymentDate().compareTo(b1.getPaymentDate())

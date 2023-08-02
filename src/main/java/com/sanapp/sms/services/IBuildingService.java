@@ -7,6 +7,7 @@ import com.sanapp.sms.dto.BuildingExpenseDTO;
 import com.sanapp.sms.dto.CementDetailsDTO;
 import com.sanapp.sms.dto.MasonDetailsExpenseDTO;
 
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -22,9 +23,9 @@ public interface IBuildingService {
     MasonDetailsExpenseDTO saveMasonPayments(MasonDetailsExpenseDTO mistriDetailsExpenseDTO);
     List<MasonDetailsExpenseDTO> listMasonPaymentDetailsDTO();
 
+
     void cementReportPdf(HttpServletResponse response) throws DocumentException, IOException;
     CementDetailsDTO saveCementDetails(CementDetailsDTO mistriDetailsExpenseDTO);
     List<CementDetailsReportData> listCementDetailsDTO();
-
 
 }
