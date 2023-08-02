@@ -4,7 +4,7 @@ import com.itextpdf.text.DocumentException;
 import com.sanapp.sms.domain.CementDetailsReportData;
 import com.sanapp.sms.dto.BuildingExpenseDTO;
 import com.sanapp.sms.dto.CementDetailsDTO;
-import com.sanapp.sms.dto.MistriDetailsExpenseDTO;
+import com.sanapp.sms.dto.MasonDetailsExpenseDTO;
 import com.sanapp.sms.services.IBuildingService;
 import com.sanapp.sms.utils.SMSConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class BuildingController {
 
     private List<BuildingExpenseDTO> addToExpenseList= new ArrayList<>();
 
-    private List<MistriDetailsExpenseDTO> addToMistriPaymentDetailsList= new ArrayList<>();
+    private List<MasonDetailsExpenseDTO> addToMistriPaymentDetailsList= new ArrayList<>();
 
 
     private List<CementDetailsDTO> addToCementDetailList= new ArrayList<>();
@@ -129,12 +129,12 @@ public class BuildingController {
 
     @GetMapping(value = {"/addToMistriForm"})
     public String openMistriForm(Model model) {
-        model.addAttribute("mistriPaymentDto", new MistriDetailsExpenseDTO());
+        model.addAttribute("mistriPaymentDto", new MasonDetailsExpenseDTO());
         return "addMistriPaymentDetails";
     }
 
     @PostMapping("/addToMistriPaymentDetails")
-    public String addToMistriPaymentDetails(@ModelAttribute(SMSConstants.ADD_MISTRIPAYMENT_DETAILS) MistriDetailsExpenseDTO mistriDto, Model model) {
+    public String addToMistriPaymentDetails(@ModelAttribute(SMSConstants.ADD_MISTRIPAYMENT_DETAILS) MasonDetailsExpenseDTO mistriDto, Model model) {
 
         if (addToMistriPaymentDetailsList == null) {
             addToMistriPaymentDetailsList = new ArrayList<>();
@@ -142,7 +142,7 @@ public class BuildingController {
         addToMistriPaymentDetailRowNumber++;
         mistriDto.setRowNum(addToMistriPaymentDetailRowNumber);
         addToMistriPaymentDetailsList.add(mistriDto);
-        model.addAttribute("mistriPaymentDto", new MistriDetailsExpenseDTO());
+        model.addAttribute("mistriPaymentDto", new MasonDetailsExpenseDTO());
         model.addAttribute("addedInMistriPaymentList", addToMistriPaymentDetailsList);
         return "addMistriPaymentDetails";
 
@@ -153,12 +153,12 @@ public class BuildingController {
 
         if (addToMistriPaymentDetailsList != null) {
             addToMistriPaymentDetailsList.stream().forEach(mistriDetailsExpenseDTO -> {
-                iBuildingService.saveMistriPayments(mistriDetailsExpenseDTO);
+                iBuildingService.saveMasonPayments(mistriDetailsExpenseDTO);
             });
             addToMistriPaymentDetailsList.clear();
             addToMistriPaymentDetailRowNumber=0;
         }
-        model.addAttribute("mistriPaymentDto", new MistriDetailsExpenseDTO());
+        model.addAttribute("mistriPaymentDto", new MasonDetailsExpenseDTO());
         return "addMistriPaymentDetails";
 
     }
@@ -169,12 +169,12 @@ public class BuildingController {
         addToMistriPaymentDetailRowNumber=0;
         //Again creating row number
         int recount = 0;
-        for (MistriDetailsExpenseDTO dto : addToMistriPaymentDetailsList) {
+        for (MasonDetailsExpenseDTO dto : addToMistriPaymentDetailsList) {
             recount++;
             dto.setRowNum(recount);
         }
 
-        model.addAttribute("mistriPaymentDto", new MistriDetailsExpenseDTO());
+        model.addAttribute("mistriPaymentDto", new MasonDetailsExpenseDTO());
         model.addAttribute("addedInMistriPaymentList", addToMistriPaymentDetailsList);
 
         return "addMistriPaymentDetails";
@@ -183,8 +183,8 @@ public class BuildingController {
 
     @GetMapping("/listMistriPaymentDetails")
     @ResponseBody
-    public List<MistriDetailsExpenseDTO> listMistriPaymentDetails() {
-        return iBuildingService.listMistriPaymentDetailsDTO();
+    public List<MasonDetailsExpenseDTO> listMistriPaymentDetails() {
+        return iBuildingService.listMasonPaymentDetailsDTO();
     }
 
     @GetMapping(value = {"/openMistriPaymentDetailsTable"})
@@ -195,7 +195,7 @@ public class BuildingController {
 
     @GetMapping(value = "/mistriReport", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public void generateMistriReportPDF(HttpServletResponse response) throws IOException, DocumentException {
-        iBuildingService.mistriReportPdf(response);
+        iBuildingService.masonReportPdf(response);
     }
 
     /*End of Mistri section*/

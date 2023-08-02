@@ -6,14 +6,14 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.sanapp.sms.dto.BuildingExpenseDTO;
-import com.sanapp.sms.dto.MistriDetailsExpenseDTO;
+import com.sanapp.sms.dto.MasonDetailsExpenseDTO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class MistriReportCreator {
+public class MasonReportCreator {
 
 
     private static Font COURIER = new Font(Font.FontFamily.COURIER, 20, Font.BOLD);
@@ -88,7 +88,7 @@ public class MistriReportCreator {
     }
 
     public static void generatePdfReport(HttpServletResponse response,
-                                         String logoImgPath, List<MistriDetailsExpenseDTO> listMistriPaymentDetailsDTO, int noOfColumns, Float[] logoImgScale,
+                                         String logoImgPath, List<MasonDetailsExpenseDTO> listMistriPaymentDetailsDTO, int noOfColumns, Float[] logoImgScale,
                                          String reportFileName, List<String> columnNames, double total) {
 
         Document document = new Document();
@@ -135,7 +135,7 @@ public class MistriReportCreator {
 
     }
 
-    private static void createTable(Document document, int noOfColumns, List<MistriDetailsExpenseDTO> listMistriPaymentDetailsDTO, List<String> columnNames) throws DocumentException {
+    private static void createTable(Document document, int noOfColumns, List<MasonDetailsExpenseDTO> listMistriPaymentDetailsDTO, List<String> columnNames) throws DocumentException {
         Paragraph paragraph = new Paragraph();
         leaveEmptyLine(paragraph, 3);
         document.add(paragraph);
@@ -154,9 +154,9 @@ public class MistriReportCreator {
         document.add(table);
     }
 
-    private static void populateMistriPaymentData(PdfPTable table, List<MistriDetailsExpenseDTO> mistriDetailsExpenseDTOS) {
+    private static void populateMistriPaymentData(PdfPTable table, List<MasonDetailsExpenseDTO> mistriDetailsExpenseDTOS) {
         int count=0;
-        for (MistriDetailsExpenseDTO mistriPayment : mistriDetailsExpenseDTOS) {
+        for (MasonDetailsExpenseDTO mistriPayment : mistriDetailsExpenseDTOS) {
             count++;
             table.setWidthPercentage(100);
             table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);

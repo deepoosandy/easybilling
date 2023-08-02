@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class MistriDetailsExpenseDTO {
+public class MasonDetailsExpenseDTO {
     private Double paymentAmount;
     private String paymentDate;
     private String paymentDescription;

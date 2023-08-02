@@ -7,13 +7,11 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.sanapp.sms.domain.CementDetailsReportData;
 import com.sanapp.sms.dto.BuildingExpenseDTO;
-import com.sanapp.sms.dto.MistriDetailsExpenseDTO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CementReportCreator {
 

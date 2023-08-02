@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class MistriDetailsDTO {
+public class MasonDetailsDTO {
     private LocalDateTime paymentDate;
     private double paidAmount;
 }

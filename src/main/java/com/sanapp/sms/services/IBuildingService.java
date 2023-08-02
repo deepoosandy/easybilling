@@ -5,7 +5,7 @@ import com.sanapp.sms.domain.CementDetailsReportData;
 import com.sanapp.sms.dto.BuildingDashboardDTO;
 import com.sanapp.sms.dto.BuildingExpenseDTO;
 import com.sanapp.sms.dto.CementDetailsDTO;
-import com.sanapp.sms.dto.MistriDetailsExpenseDTO;
+import com.sanapp.sms.dto.MasonDetailsExpenseDTO;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,11 +18,13 @@ public interface IBuildingService {
     List<BuildingExpenseDTO > listAllBuildingExpenseDTO();
     void generatePdf(HttpServletResponse response) throws DocumentException, IOException;
 
-    void mistriReportPdf(HttpServletResponse response) throws DocumentException, IOException;
-    MistriDetailsExpenseDTO saveMistriPayments(MistriDetailsExpenseDTO mistriDetailsExpenseDTO);
-    List<MistriDetailsExpenseDTO> listMistriPaymentDetailsDTO();
+    void masonReportPdf(HttpServletResponse response) throws DocumentException, IOException;
+    MasonDetailsExpenseDTO saveMasonPayments(MasonDetailsExpenseDTO mistriDetailsExpenseDTO);
+    List<MasonDetailsExpenseDTO> listMasonPaymentDetailsDTO();
 
     void cementReportPdf(HttpServletResponse response) throws DocumentException, IOException;
     CementDetailsDTO saveCementDetails(CementDetailsDTO mistriDetailsExpenseDTO);
     List<CementDetailsReportData> listCementDetailsDTO();
+
+
 }

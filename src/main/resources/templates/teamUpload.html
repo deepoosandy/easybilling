@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<style>
+div.container {
+border-radius: 5px;
+background-color: #f2f2f2;
+padding: 20px;
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 105%;
+}
+
+
+</style>
+<head>
+    <title>Item Upload</title>
+    <link rel="stylesheet" type="text/css"
+          href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+
+</head>
+<body>
+<div th:replace="/fragments/other-header :: other-header"/>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-8 mt-5"  style="top: 20px;">
+            <a href="/images/sample Item upload.xlsx" download="sample Item upload" style="position: absolute; right:-350px ; top: 46px;">
+                <img src="/images/download_upload_sample.ico" alt="download sample excel" width="50" height="50" class="tooltip"> <span class="tooltiptext">Download sample upload excel</span>
+            </a>
+            <form method="POST" enctype="multipart/form-data" action="/uploadteam">
+                <div class="form-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="customFile" name="file">
+                        <label class="custom-file-label" for="customFile">Choose file</label>
+                    </div>
+                </div>
+
+                <button class="btn btn-success" type="submit"  style="color: #fff;background-color: #4285f4 !important;" onclick=" return validateUpload('customFile')">Upload team</button>
+            </form>
+        </div>
+
+    </div>
+
+    <br><br>
+
+</div>
+</div>
+<footer th:replace="layout/layout :: footer"></footer>
+<script>
+    function validateUpload(inputId){
+
+      var val=document.getElementById(inputId).files.length;
+      if(val==0){
+      alert("Please upload file!");
+      return false;
+      }
+      return true;
+    }
+</script>
+</body>
+</html>

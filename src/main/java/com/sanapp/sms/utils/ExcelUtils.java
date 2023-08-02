@@ -1,5 +1,6 @@
 package com.sanapp.sms.utils;
 
+import com.sanapp.sms.domain.dream11.domain.Match;
 import com.sanapp.sms.dto.ItemDetail;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -44,14 +45,14 @@ public class ExcelUtils {
                 if (cellIndex == 0) { // item name
                     itemDetail.setItemName(currentCell.getStringCellValue());
 
-                }else if(cellIndex==1) {
+                } else if (cellIndex == 1) {
                     itemDetail.setItemDescription(currentCell.getStringCellValue());
                 } else if (cellIndex == 2) { // item description
                     itemDetail.setItemCode(currentCell.getStringCellValue());
                 } else if (cellIndex == 3) { // item unit price and uploadView date time
                     itemDetail.setItemUnitPrice(currentCell.getNumericCellValue());
 
-                }else if(cellIndex==4){ //Meausement UNIT
+                } else if (cellIndex == 4) { //Meausement UNIT
                     itemDetail.setMeasurementUnit(currentCell.getStringCellValue());
                 }
 
@@ -71,4 +72,53 @@ public class ExcelUtils {
 
         return itemDetails;
     }
+
+    public static List<Match> parseTeamDataExcelFile(InputStream is) throws IOException {
+        Workbook workbook = new XSSFWorkbook(is);
+
+        Sheet sheet = workbook.getSheetAt(0);
+        Iterator<Row> rows = sheet.iterator();
+
+        List<Match> matchList = new ArrayList<>();
+
+        int rowNumber = 0;
+        String teamCode = "";
+        while (rows.hasNext()) {
+            Row currentRow = rows.next();
+
+            Iterator<Cell> cellsInRow = currentRow.iterator();
+            int cellIndex = 0;
+            String playerName = "";
+            while (cellsInRow.hasNext()) {
+                Match match = new Match();
+                Cell currentCell = cellsInRow.next();
+                if (rowNumber == 0) {
+                    teamCode = currentCell.getStringCellValue();
+                    rowNumber++;
+                    continue;
+
+                }
+
+                if (cellIndex == 0) { // item name
+                    playerName = currentCell.getStringCellValue();
+                    cellIndex++;
+                    continue;
+                }
+                match.setPlayerName(playerName);
+                match.setTeamCode(teamCode);
+                match.setPlayerScore(Double.valueOf(currentCell.getNumericCellValue()));
+                matchList.add(match);
+
+            }
+
+
+            //rowNumber++;
+        }
+
+        // Close WorkBook
+        workbook.close();
+
+        return matchList;
+    }
+
 }
